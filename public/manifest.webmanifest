@@ -1,0 +1,16 @@
+{
+  "name": "PaperBridge",
+  "short_name": "PaperBridge",
+  "description": "A local-first academic paper reader and translator for macOS.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ed",
+  "theme_color": "#0e1515",
+  "icons": [
+    {
+      "src": "/images/paperbridge-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
