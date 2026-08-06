@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import SiteHeader from './components/SiteHeader.vue'
 import HeroSection from './components/HeroSection.vue'
+import ProductTourSection from './components/ProductTourSection.vue'
 import InteractiveDemo from './components/InteractiveDemo.vue'
 import WorkflowSection from './components/WorkflowSection.vue'
+import LocalPipelineSection from './components/LocalPipelineSection.vue'
 import CapabilitiesSection from './components/CapabilitiesSection.vue'
 import PrivacySection from './components/PrivacySection.vue'
+import FAQSection from './components/FAQSection.vue'
 import DownloadSection from './components/DownloadSection.vue'
 import BrandMark from './components/BrandMark.vue'
 </script>
@@ -14,10 +17,13 @@ import BrandMark from './components/BrandMark.vue'
     <SiteHeader />
     <main>
       <HeroSection />
+      <ProductTourSection />
       <InteractiveDemo />
       <WorkflowSection />
+      <LocalPipelineSection />
       <CapabilitiesSection />
       <PrivacySection />
+      <FAQSection />
       <DownloadSection />
     </main>
     <footer class="site-footer">

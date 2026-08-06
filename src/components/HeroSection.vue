@@ -1,30 +1,75 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const visual = ref<HTMLElement | null>(null)
+const activeShot = ref(0)
+let shotTimer: number | undefined
+
+const shots = [
+  {
+    label: 'Bilingual paper',
+    eyebrow: 'MinerU reading view',
+    image: '/images/screenshots/bilingual-paper.jpg',
+    alt: 'PaperBridge showing a structured bilingual academic paper with its outline',
+  },
+  {
+    label: 'Select & understand',
+    eyebrow: 'Translation · explanation · notes',
+    image: '/images/screenshots/selection-tools.jpg',
+    alt: 'PaperBridge translating a selected term and showing research annotation tools',
+  },
+  {
+    label: 'Set up locally',
+    eyebrow: 'Ollama · TranslateGemma · MinerU',
+    image: '/images/screenshots/local-ai-setup.jpg',
+    alt: 'PaperBridge local AI setup for Ollama, TranslateGemma and MinerU',
+  },
+]
+
+function selectShot(index: number) {
+  activeShot.value = index
+  startRotation()
+}
+
+function startRotation() {
+  window.clearInterval(shotTimer)
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  shotTimer = window.setInterval(() => {
+    activeShot.value = (activeShot.value + 1) % shots.length
+  }, 5200)
+}
+
+function pauseRotation() {
+  window.clearInterval(shotTimer)
+}
 
 function tilt(event: MouseEvent) {
   if (!visual.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
   const bounds = visual.value.getBoundingClientRect()
   const x = (event.clientX - bounds.left) / bounds.width - 0.5
   const y = (event.clientY - bounds.top) / bounds.height - 0.5
-  visual.value.style.setProperty('--tilt-x', `${y * -1.8}deg`)
-  visual.value.style.setProperty('--tilt-y', `${x * 2.6}deg`)
+  visual.value.style.setProperty('--tilt-x', `${y * -1.2}deg`)
+  visual.value.style.setProperty('--tilt-y', `${x * 1.8}deg`)
 }
 
 function resetTilt() {
   visual.value?.style.setProperty('--tilt-x', '0deg')
   visual.value?.style.setProperty('--tilt-y', '0deg')
+  startRotation()
 }
+
+onMounted(startRotation)
+onBeforeUnmount(() => window.clearInterval(shotTimer))
 </script>
 
 <template>
   <section id="top" class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
+      <p class="hero-kicker"><span></span> Native macOS · local-first</p>
       <h1 id="hero-title">Read the paper.<br />Keep the meaning.</h1>
       <p>
-        Translate, summarize, and explain academic papers with local AI, without losing figures,
-        formulas, tables, or context.
+        Translate, summarize, and explain academic papers with local AI, while figures,
+        formulas, tables, and the exact source PDF stay intact.
       </p>
       <div class="hero-actions">
         <a class="button button-primary" href="https://github.com/haoyunLi/PaperBridge/releases/latest">
@@ -33,62 +78,54 @@ function resetTilt() {
           </svg>
           Download for macOS
         </a>
-        <a class="button button-ghost" href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">
-          View on GitHub <span aria-hidden="true">↗</span>
-        </a>
+        <a class="button button-ghost" href="#tour">See the real app <span aria-hidden="true">↓</span></a>
       </div>
       <p class="availability"><span></span> Windows version coming soon</p>
     </div>
 
-    <div
-      ref="visual"
-      class="hero-visual"
-      aria-label="PaperBridge bilingual reader preview"
-      @mousemove="tilt"
-      @mouseleave="resetTilt"
-    >
-      <div class="window-chrome"><i></i><i></i><i></i><span>attention-is-all-you-need.pdf</span></div>
-      <aside class="mock-sidebar">
-        <div class="mini-brand">
-          <img src="/images/paperbridge-icon.png" alt="" />
-          <div><strong>PaperBridge</strong><small>LOCAL-ONLY / OLLAMA</small></div>
+    <div class="hero-product">
+      <div
+        ref="visual"
+        class="hero-visual hero-screenshot-stage"
+        aria-live="polite"
+        @mousemove="tilt"
+        @mouseenter="pauseRotation"
+        @mouseleave="resetTilt"
+      >
+        <Transition name="hero-shot" mode="out-in">
+          <img
+            :key="shots[activeShot]!.image"
+            :src="shots[activeShot]!.image"
+            :alt="shots[activeShot]!.alt"
+            width="1400"
+            height="1400"
+          />
+        </Transition>
+        <div class="hero-visual-proof">
+          <i></i>
+          <span><small>{{ shots[activeShot]!.eyebrow }}</small><strong>{{ shots[activeShot]!.label }}</strong></span>
         </div>
-        <button type="button">＋ Open PDF</button>
-        <div class="mock-meta"><small>DOCUMENT</small><strong>attention-is-all-you-need.pdf</strong><span>Paragraphs <b>96</b></span><span>Parser <b>MinerU</b></span><span>Translated <b>96</b></span><span>Skipped refs <b>41</b></span></div>
-        <div class="mock-outline"><small>OUTLINE</small><span>Abstract</span><span class="active">1 Introduction</span><span>2 Method</span><span>3 Experiments</span></div>
-      </aside>
-      <div class="mock-paper">
-        <div class="mock-toolbar">
-          <div><strong>attention-is-all-you-need.pdf</strong><small>English → Simplified Chinese · MinerU · 112 blocks</small></div>
-          <span class="ready">● Ollama Ready</span>
-        </div>
-        <div class="mock-tabs"><span>Paper</span><span class="active">Reader</span><span>Summary</span><span>Full Translation</span></div>
-        <div class="mock-reader-list">
-          <article class="mock-paragraph-card">
-            <small>13 · ORIGINAL · ENGLISH</small>
-            <p>Recent advances in <mark>representation learning</mark> have changed how models understand scientific language.</p>
-            <hr />
-            <small>TRANSLATION · SIMPLIFIED CHINESE</small>
-            <p class="type-line">近年来，<mark>表征学习</mark>的进展改变了模型理解科学语言的方式。</p>
-          </article>
-          <article class="mock-resource-card mock-formula-card">
-            <header><b>ƒ Formula</b><small>PRESERVED FROM SOURCE</small></header>
-            <p>Attention(Q, K, V) = softmax(QKᵀ / √d<sub>k</sub>)V</p>
-          </article>
-          <article class="mock-resource-card mock-figure-card">
-            <header><b>▧ Figure</b><small>IMAGE PRESERVED · CAPTION TRANSLATED</small></header>
-            <div class="mini-figure" aria-label="Preserved scientific diagram"><i>Input</i><i>Encoder</i><i>Attention</i><i>Output</i></div>
-            <p><b>Figure 2.</b> The Transformer model architecture.</p>
-            <p class="caption-translation"><b>图 2.</b> Transformer 模型架构。</p>
-          </article>
-        </div>
-        <div class="selection-popover">
-          <div><b>Translate</b><span>Explain</span></div>
-          <strong>representation learning</strong>
-          <p>表征学习</p>
-        </div>
+        <div class="hero-local-stamp"><b>100%</b><span>local processing</span></div>
+      </div>
+      <div class="hero-shot-controls" role="tablist" aria-label="PaperBridge app previews">
+        <button
+          v-for="(shot, index) in shots"
+          :key="shot.label"
+          :class="{ active: activeShot === index }"
+          type="button"
+          role="tab"
+          :aria-selected="activeShot === index"
+          @click="selectShot(index)"
+        >
+          <span>0{{ index + 1 }}</span>{{ shot.label }}
+        </button>
       </div>
     </div>
-    <a class="scroll-cue" href="#demo">Explore the reader <span>↓</span></a>
+
+    <div class="hero-stack" aria-label="PaperBridge local technology stack">
+      <div><span>PDFKit</span><i></i><span>MinerU</span><i></i><span>Ollama</span><i></i><span>TranslateGemma</span><i></i><span>Markdown + assets</span><i></i></div>
+      <div aria-hidden="true"><span>PDFKit</span><i></i><span>MinerU</span><i></i><span>Ollama</span><i></i><span>TranslateGemma</span><i></i><span>Markdown + assets</span><i></i></div>
+    </div>
+    <a class="scroll-cue" href="#tour">Explore PaperBridge <span>↓</span></a>
   </section>
 </template>
