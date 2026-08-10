@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import SiteHeader from './components/SiteHeader.vue'
 import HeroSection from './components/HeroSection.vue'
-import ProductTourSection from './components/ProductTourSection.vue'
 import InteractiveDemo from './components/InteractiveDemo.vue'
 import WorkflowSection from './components/WorkflowSection.vue'
-import LocalPipelineSection from './components/LocalPipelineSection.vue'
 import CapabilitiesSection from './components/CapabilitiesSection.vue'
 import PrivacySection from './components/PrivacySection.vue'
 import FAQSection from './components/FAQSection.vue'
@@ -17,10 +15,8 @@ import BrandMark from './components/BrandMark.vue'
     <SiteHeader />
     <main>
       <HeroSection />
-      <ProductTourSection />
-      <InteractiveDemo />
       <WorkflowSection />
-      <LocalPipelineSection />
+      <InteractiveDemo />
       <CapabilitiesSection />
       <PrivacySection />
       <FAQSection />
@@ -29,7 +25,7 @@ import BrandMark from './components/BrandMark.vue'
     <footer class="site-footer">
       <BrandMark />
       <nav aria-label="Footer navigation">
-        <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://github.com/haoyunLi/PaperBridge#readme" target="_blank" rel="noreferrer">Documentation</a>
         <a href="https://github.com/haoyunLi/PaperBridge/releases" target="_blank" rel="noreferrer">Releases</a>
         <a href="#privacy">Privacy</a>

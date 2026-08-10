@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 type AssistantMode = 'translate' | 'explain'
 
 defineProps<{
@@ -7,6 +9,9 @@ defineProps<{
 }>()
 
 const mode = defineModel<AssistantMode>({ required: true })
+const highlighted = ref(false)
+const noteAdded = ref(false)
+const bookmarked = ref(false)
 </script>
 
 <template>
@@ -22,9 +27,9 @@ const mode = defineModel<AssistantMode>({ required: true })
       </div>
     </Transition>
     <div class="annotation-actions">
-      <button type="button">Highlight</button>
-      <button type="button">Add note</button>
-      <button type="button">Bookmark</button>
+      <button :class="{ active: highlighted }" type="button" @click="highlighted = !highlighted">{{ highlighted ? 'Highlighted' : 'Highlight' }}</button>
+      <button :class="{ active: noteAdded }" type="button" @click="noteAdded = !noteAdded">{{ noteAdded ? 'Note saved' : 'Add note' }}</button>
+      <button :class="{ active: bookmarked }" type="button" @click="bookmarked = !bookmarked">{{ bookmarked ? 'Bookmarked' : 'Bookmark' }}</button>
     </div>
   </div>
 </template>

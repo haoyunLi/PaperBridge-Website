@@ -1,118 +1,99 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useReveal } from '../composables/useReveal'
 import SelectionAssistant from './SelectionAssistant.vue'
 
-type DemoTab = 'paper' | 'reader' | 'summary' | 'full'
+type ReaderView = 'reader' | 'summary' | 'full'
 
-const section = ref<HTMLElement | null>(null)
-const activeTab = ref<DemoTab>('reader')
+const activeView = ref<ReaderView>('reader')
+const selectedContext = ref<ReaderView | null>(null)
+const assistantMode = ref<'translate' | 'explain'>('translate')
 const sourceLanguage = ref('English')
 const targetLanguage = ref('简体中文')
-const selectedContext = ref<DemoTab | null>('reader')
-const explanationMode = ref<'translate' | 'explain'>('translate')
-const demoState = ref<'ready' | 'processing' | 'complete'>('complete')
-const progress = ref(100)
-let progressTimer: number | undefined
+const noteSaved = ref(false)
+const exportReady = ref(false)
 
-useReveal(section)
-
-const statusText = computed(() => {
-  if (demoState.value === 'processing') return `Translating locally · ${progress.value}%`
-  if (demoState.value === 'ready') return 'Sample paper ready'
-  return 'Translation complete · figures preserved'
+const activeLabel = computed(() => {
+  if (activeView.value === 'reader') return 'Bilingual reader'
+  if (activeView.value === 'summary') return 'Whole-paper summary'
+  return 'Connected translation'
 })
 
-function runDemo() {
-  window.clearInterval(progressTimer)
-  demoState.value = 'processing'
-  progress.value = 8
-  activeTab.value = 'reader'
+function changeView(view: ReaderView) {
+  activeView.value = view
   selectedContext.value = null
-  progressTimer = window.setInterval(() => {
-    progress.value = Math.min(progress.value + 7, 100)
-    if (progress.value >= 100) {
-      window.clearInterval(progressTimer)
-      demoState.value = 'complete'
-    }
-  }, 90)
+  assistantMode.value = 'translate'
 }
 
-function changeTab(tab: DemoTab) {
-  const update = () => {
-    activeTab.value = tab
-    selectedContext.value = null
-  }
-  if ('startViewTransition' in document) {
-    ;(document as Document & { startViewTransition: (callback: () => void) => void }).startViewTransition(update)
-  } else {
-    update()
-  }
-}
-
-function toggleSelection(context: DemoTab) {
-  selectedContext.value = selectedContext.value === context ? null : context
-  explanationMode.value = 'translate'
+function toggleSelection(view: ReaderView) {
+  selectedContext.value = selectedContext.value === view ? null : view
+  assistantMode.value = 'translate'
 }
 </script>
 
 <template>
-  <section id="demo" ref="section" class="demo-section reveal-section" aria-labelledby="demo-title">
-    <div class="section-heading">
-      <p class="section-index">Interactive demo</p>
-      <h2 id="demo-title">Try the reading flow.</h2>
-      <p>Change the language, switch views, or select the highlighted term. The real app runs this workflow entirely on your Mac.</p>
+  <section id="reader" class="reader-section" aria-labelledby="reader-title">
+    <div class="reader-intro">
+      <h2 id="reader-title">Not a translated text file.<br /><em>A bilingual paper.</em></h2>
+      <p>
+        Read the argument in sequence, inspect the original beside every translation, and
+        act on the exact phrase that needs attention. This simulation is built from interface
+        elements, not screenshots.
+      </p>
+      <div class="reader-proof">
+        <span>Choose a view</span>
+        <i></i>
+        <span>Select “representation learning”</span>
+        <i></i>
+        <span>Switch Translate / Explain</span>
+      </div>
     </div>
 
-    <div class="demo-shell">
-      <header class="demo-toolbar">
-        <div class="demo-document">
-          <img src="/images/paperbridge-icon.png" alt="" />
-          <div><strong>attention-is-all-you-need.pdf</strong><small>English → Simplified Chinese · MinerU · 112 blocks</small></div>
+    <div class="reader-product" aria-label="Interactive PaperBridge reader simulation">
+      <header class="reader-product-bar">
+        <div class="reader-file">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2h9l5 5v15H5V2Z" /><path d="M14 2v6h5" /></svg>
+          <p><b>representation-learning.pdf</b><small>MinerU · 36 structured blocks · saved locally</small></p>
         </div>
-        <span class="demo-ready">● Ollama Ready</span>
-        <div class="demo-actions">
-          <button class="run-demo" type="button" :disabled="demoState === 'processing'" @click="runDemo">{{ demoState === 'processing' ? 'Working locally…' : 'Translate' }}</button>
-          <a href="https://github.com/haoyunLi/PaperBridge/releases/latest">Export Markdown ↓</a>
-        </div>
+        <div class="reader-local"><i></i> Ollama ready</div>
+        <button class="reader-export" type="button" @click="exportReady = true">{{ exportReady ? 'Export ready' : 'Export Markdown' }}</button>
       </header>
 
-      <div class="demo-progress" :class="demoState"><span :style="{ width: `${progress}%` }"></span><small>{{ statusText }}</small></div>
-
-      <div class="demo-layout">
-        <aside class="demo-outline" aria-label="PaperBridge sidebar">
-          <section class="sidebar-demo-card"><small>SOURCE</small><button class="open-pdf" type="button">＋ Open PDF</button><button type="button">⌄ Paste Text</button></section>
-          <section class="sidebar-demo-card document-stats"><small>DOCUMENT</small><strong>attention-is-all-you-need.pdf</strong><span>Paragraphs <b>96</b></span><span>Parser <b>MinerU</b></span><span>Translated <b>96</b></span><span>Skipped refs <b>41</b></span></section>
-          <section class="sidebar-demo-card compact-outline"><small>OUTLINE</small><button class="selected" type="button"><span>Abstract</span><b>1</b></button><button type="button"><span>1 Introduction</span><b>2</b></button><button type="button"><span>3 Model Architecture</span><b>4</b></button></section>
-          <section class="sidebar-demo-card language-sidebar"><small>LANGUAGE</small><label>From<select v-model="sourceLanguage"><option>English</option><option>French</option><option>German</option><option>Spanish</option></select></label><label>To<select v-model="targetLanguage"><option>简体中文</option><option>English</option><option>日本語</option><option>한국어</option></select></label></section>
-          <div class="local-indicator"><i></i><span>Ollama ready<br /><small>MinerU ready · PDFKit fallback</small></span></div>
+      <div class="reader-product-layout">
+        <aside class="reader-rail">
+          <div class="language-pair">
+            <label>From<select v-model="sourceLanguage"><option>English</option><option>French</option><option>German</option><option>Spanish</option></select></label>
+            <span aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14M15 4l4 4-4 4M19 16H5M9 12l-4 4 4 4" /></svg></span>
+            <label>To<select v-model="targetLanguage"><option>简体中文</option><option>English</option><option>日本語</option><option>한국어</option></select></label>
+          </div>
+          <nav aria-label="Simulated paper outline">
+            <small>DOCUMENT OUTLINE</small>
+            <span class="outline-row">Abstract <b>1</b></span>
+            <span class="outline-row active">Introduction <b>2</b></span>
+            <span class="outline-row">Method <b>5</b></span>
+            <span class="outline-row">Experiments <b>8</b></span>
+            <span class="outline-row">Conclusion <b>11</b></span>
+          </nav>
+          <div class="rail-model">
+            <small>LOCAL MODELS</small>
+            <p><i></i><span>TranslateGemma 4B<b>Translation</b></span></p>
+            <p><i></i><span>Gemma 3 4B<b>Explain · summary</b></span></p>
+          </div>
         </aside>
 
-        <main class="demo-document-view">
-          <nav class="reader-tabs" aria-label="Demo views">
-            <button :class="{ active: activeTab === 'paper' }" type="button" @click="changeTab('paper')">Paper</button>
-            <button :class="{ active: activeTab === 'reader' }" type="button" @click="changeTab('reader')">Reader</button>
-            <button :class="{ active: activeTab === 'summary' }" type="button" @click="changeTab('summary')">Summary</button>
-            <button :class="{ active: activeTab === 'full' }" type="button" @click="changeTab('full')">Full Translation</button>
-          </nav>
+        <main class="reader-canvas">
+          <div class="reader-viewbar">
+            <div role="tablist" aria-label="Reading views">
+              <button :class="{ active: activeView === 'reader' }" type="button" role="tab" :aria-selected="activeView === 'reader'" @click="changeView('reader')">Reader</button>
+              <button :class="{ active: activeView === 'summary' }" type="button" role="tab" :aria-selected="activeView === 'summary'" @click="changeView('summary')">Summary</button>
+              <button :class="{ active: activeView === 'full' }" type="button" role="tab" :aria-selected="activeView === 'full'" @click="changeView('full')">Full translation</button>
+            </div>
+            <span>{{ activeLabel }}</span>
+          </div>
 
-          <Transition name="paper-view" mode="out-in">
-            <article v-if="activeTab === 'paper'" key="paper" class="paper-preview-view">
-              <header><div><strong>Full Document Preview</strong><small>Original PDF layout stays intact; translation is added without modifying source resources.</small></div><span>Bilingual</span><span>Original</span><span>Translation</span></header>
-              <div class="paper-preview-page">
-                <h3>3 Model Architecture</h3>
-                <div class="selection-host paper-selection-host">
-                  <p>Most competitive neural sequence transduction models have an <button class="selectable-term" :class="{ selected: selectedContext === 'paper' }" type="button" aria-haspopup="dialog" :aria-expanded="selectedContext === 'paper'" @click="toggleSelection('paper')">encoder-decoder structure</button>. Here, the encoder maps an input sequence of symbol representations to a sequence of continuous representations.</p>
-                  <SelectionAssistant v-if="selectedContext === 'paper'" v-model="explanationMode" translation="编码器—解码器结构" explanation="One part reads the input; another part creates the output from what was understood." />
-                </div>
-                <div class="preview-translation"><small>SIMPLIFIED CHINESE TRANSLATION</small><p>多数具有竞争力的神经序列转换模型采用编码器—解码器结构。编码器将输入符号序列映射为连续表征序列。</p></div>
-                <div class="equation compact">Attention(Q, K, V) = softmax(QKᵀ / √d<sub>k</sub>)V</div>
-                <div class="paper-figure-resource"><div class="figure-flow"><span>Inputs</span><i>→</i><span>Multi-Head Attention</span><i>→</i><span>Outputs</span></div><p><b>Figure 1.</b> The Transformer model architecture.</p><p class="caption-translation"><b>图 1.</b> Transformer 模型架构。</p><small>ORIGINAL IMAGE PRESERVED · CAPTION TRANSLATED</small></div>
-              </div>
-            </article>
-
-            <article v-else-if="activeTab === 'reader'" key="reader" class="reader-view">
-              <div class="paragraph-block original-block">
+          <Transition name="reader-page" mode="out-in">
+            <article v-if="activeView === 'reader'" key="reader" class="reader-page bilingual-page">
+              <header><small>INTRODUCTION</small><h3>Learning representations that travel</h3><span>2 / 36</span></header>
+              <section class="source-passage">
                 <small>ORIGINAL · {{ sourceLanguage.toUpperCase() }}</small>
                 <p>
                   Recent advances in
@@ -124,63 +105,79 @@ function toggleSelection(context: DemoTab) {
                     :aria-expanded="selectedContext === 'reader'"
                     @click="toggleSelection('reader')"
                   >representation learning</button>
-                  have significantly improved performance across many scientific tasks. By learning reusable representations from large-scale data, models can generalize to new domains.
+                  have improved performance across scientific tasks. By learning reusable
+                  features from large-scale data, models can generalize to new domains.
                 </p>
-
-                <SelectionAssistant v-if="selectedContext === 'reader'" v-model="explanationMode" translation="表征学习" explanation="A way for a model to learn useful patterns it can reuse on new tasks." />
-              </div>
-
-              <div class="paragraph-block translation-block" :class="{ concealed: demoState !== 'complete' }">
+                <SelectionAssistant
+                  v-if="selectedContext === 'reader'"
+                  v-model="assistantMode"
+                  translation="表征学习"
+                  explanation="A method that teaches a model useful patterns it can reuse for new tasks."
+                />
+              </section>
+              <section class="translated-passage">
                 <small>TRANSLATION · {{ targetLanguage }}</small>
-                <p>近年来，表征学习的进展显著提升了许多科学任务的性能。通过从大规模数据中学习可复用的表征，模型能够更好地泛化到新的研究领域。</p>
-              </div>
-
-              <div class="preserved-content">
-                <div class="equation" aria-label="Preserved equation">ℒ = − <span>1</span>⁄<span>N</span> Σ log <span class="fraction">exp(zᵀz⁺/τ)<i>Σ exp(zᵀzⱼ/τ)</i></span></div>
-                <div class="scientific-figure">
-                  <div class="figure-flow"><span>Input text</span><i>→</i><span>Encoder</span><i>→</i><span>Task head</span><i>→</i><span>Prediction</span></div>
-                  <p><b>Figure 2.</b> Overview of the representation-learning framework.</p>
-                  <p class="caption-translation"><b>图 2.</b> 表征学习框架概览。</p>
-                  <small>✓ ORIGINAL IMAGE PRESERVED · CAPTION TRANSLATED</small>
+                <p>近年来，表征学习的进展提升了多项科学任务的性能。通过从大规模数据中学习可复用的特征，模型能够泛化到新的研究领域。</p>
+              </section>
+              <section class="research-resource formula-resource">
+                <div><small>FORMULA · ORIGINAL RESOURCE</small><p>ℒ = − 1/N Σ log p(yᵢ | xᵢ)</p></div>
+                <span>Preserved exactly<br /><small>Not sent for translation</small></span>
+              </section>
+              <section class="research-resource figure-resource">
+                <div class="model-diagram" aria-label="Model architecture diagram">
+                  <span>Input</span><i></i><span>Encoder</span><i></i><span>Task head</span><i></i><span>Prediction</span>
                 </div>
-              </div>
+                <p><b>Figure 2.</b> Overview of the representation-learning framework.</p>
+                <p class="caption-translation"><b>图 2.</b> 表征学习框架概览。</p>
+                <small>Original figure preserved · caption translated</small>
+              </section>
             </article>
 
-            <article v-else-if="activeTab === 'summary'" key="summary" class="summary-view">
-              <small>WHOLE-PAPER SUMMARY · ENGLISH + SIMPLIFIED CHINESE</small>
-              <h3>Attention-based sequence modeling without recurrence</h3>
-              <div class="selection-host summary-selection-host">
-                <p>This paper introduces the Transformer, a sequence model built entirely around <button class="selectable-term" :class="{ selected: selectedContext === 'summary' }" type="button" aria-haspopup="dialog" :aria-expanded="selectedContext === 'summary'" @click="toggleSelection('summary')">self-attention</button> rather than recurrent or convolutional layers.</p>
-                <SelectionAssistant v-if="selectedContext === 'summary'" v-model="explanationMode" translation="自注意力" explanation="Each word looks at the other words and decides which ones matter for understanding the sentence." />
+            <article v-else-if="activeView === 'summary'" key="summary" class="reader-page summary-page">
+              <header><small>WHOLE-PAPER SUMMARY</small><h3>The argument, without losing the evidence</h3><span>EN + 简中</span></header>
+              <p class="summary-lead">
+                This paper studies how reusable representations improve scientific models
+                when labelled data is limited.
+              </p>
+              <div class="summary-points">
+                <section><small>QUESTION</small><p>Can one model learn features that transfer across related tasks?</p></section>
+                <section><small>METHOD</small><p>Pre-train an encoder, then adapt it with small task-specific heads.</p></section>
+                <section><small>RESULT</small><p>Transfer improves accuracy and data efficiency across the evaluated domains.</p></section>
               </div>
-              <ol>
-                <li><b>Problem.</b> Recurrence limits parallel training and makes long-range dependencies harder to learn.</li>
-                <li><b>Method.</b> Multi-head attention and positional encoding replace recurrence entirely.</li>
-                <li><b>Result.</b> The architecture improves translation quality while training more efficiently.</li>
-              </ol>
-              <div class="summary-translation"><small>简体中文摘要</small><p>本文提出仅依赖注意力机制的 Transformer 架构，在不使用循环或卷积结构的情况下完成序列建模，并在机器翻译任务中取得优异结果。</p></div>
+              <section class="summary-chinese">
+                <small>简体中文摘要</small>
+                <p>本文研究在标注数据有限时，可复用表征如何提升科学模型。作者先预训练编码器，再针对具体任务进行适配，从而改善准确率与数据效率。</p>
+              </section>
+              <p class="summary-note">Generated locally from the reconstructed paper, including headings and captions.</p>
             </article>
 
-            <article v-else key="full" class="full-view">
-              <small>CONNECTED TRANSLATION · SOURCE STRUCTURE PRESERVED</small>
-              <h3>2 方法</h3>
-              <div class="selection-host full-selection-host">
-                <p>Transformer 完全依赖<button class="selectable-term" :class="{ selected: selectedContext === 'full' }" type="button" aria-haspopup="dialog" :aria-expanded="selectedContext === 'full'" @click="toggleSelection('full')">注意力机制</button>来建立输入与输出之间的全局依赖关系，而不使用循环结构。</p>
-                <SelectionAssistant v-if="selectedContext === 'full'" v-model="explanationMode" translation="attention mechanism" explanation="The model compares parts of the input and gives more weight to the parts that are most relevant." />
-              </div>
-              <div class="equation compact">ℒ = − 1/N Σ log p(yᵢ | xᵢ)</div>
-              <div class="translated-figure">
-                <div><span>Input text</span><i>→</i><span>Encoder</span><i>→</i><span>Attention</span><i>→</i><span>Output</span></div>
-                <p><b>Figure 2.</b> The original figure remains unchanged.</p>
-                <p class="caption-translation"><b>图 2.</b> 原图保持不变，仅翻译图注。</p>
-                <small>ORIGINAL IMAGE PRESERVED · CAPTION TRANSLATED</small>
-              </div>
-              <h3>3 实验结果</h3>
-              <p>实验显示，该方法在多个基准测试中取得稳定提升，并在标注数据有限时保持较好的泛化能力。</p>
+            <article v-else key="full" class="reader-page full-page">
+              <header><small>CONNECTED TRANSLATION</small><h3>3 方法</h3><span>Structure preserved</span></header>
+              <p>
+                我们训练一个共享编码器，使其从多个数据来源中学习可迁移的表征。
+                与仅针对单一任务训练的模型相比，该方法在标注样本有限时更加稳定。
+              </p>
+              <div class="full-formula"><small>原始公式</small><p>z = f<sub>θ</sub>(x), &nbsp; y = g<sub>φ</sub>(z)</p></div>
+              <section class="research-resource figure-resource compact">
+                <div class="model-diagram"><span>数据</span><i></i><span>共享编码器</span><i></i><span>任务头</span></div>
+                <p><b>图 3.</b> 原图保持不变，仅图注被翻译。</p>
+                <small>Image asset retained in exported Markdown</small>
+              </section>
+              <h4>3.1 训练策略</h4>
+              <p>训练过程交替采样不同任务，并使用统一的归一化目标。全文翻译连接前后段落，而不是简单复制逐段结果。</p>
             </article>
           </Transition>
         </main>
       </div>
+
+      <footer class="reader-statusbar">
+        <span><i></i> {{ activeLabel }}</span>
+        <button type="button" @click="noteSaved = !noteSaved">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v17l-7-4-7 4V4Z" /></svg>
+          {{ noteSaved ? 'Bookmark saved' : 'Bookmark this view' }}
+        </button>
+        <span>All processing remains on this Mac</span>
+      </footer>
     </div>
   </section>
 </template>

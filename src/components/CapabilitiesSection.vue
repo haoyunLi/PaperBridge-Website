@@ -1,41 +1,68 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useReveal } from '../composables/useReveal'
 
-const section = ref<HTMLElement | null>(null)
 const active = ref(0)
-useReveal(section)
 
 const capabilities = [
   {
-    title: 'Document fidelity',
-    detail: 'Keep source material where it belongs.',
-    items: ['Exact PDF page preview', 'MinerU structured Markdown', 'Figures and tables preserved', 'LaTeX formulas unchanged', 'Reference section skipped automatically'],
+    title: 'Read without losing context',
+    summary: 'Original and translated paragraphs stay in one continuous scholarly reading flow.',
+    detail: 'Switch among exact PDF pages, a bilingual reader, whole-paper summaries, and a connected full translation. Headings, captions, equations, and figures remain part of the argument.',
+    tags: ['Bilingual sequence', 'PDF preview', 'Full translation', 'Resume reading'],
   },
   {
-    title: 'Research tools',
-    detail: 'Work directly with the passage you are reading.',
-    items: ['Selected-word translation', 'Plain-language explanation', 'Highlights and notes', 'Paragraph bookmarks', 'Search and resume'],
+    title: 'Ask the exact phrase',
+    summary: 'Select a word or passage and get an answer scoped to that selection.',
+    detail: 'Translate only the highlighted phrase, request a plain-language explanation, add a note, save a highlight, or bookmark the paragraph. The same tools work in Reader, Summary, Paper, and Full Translation.',
+    tags: ['Selection translation', 'Explain simply', 'Highlights', 'Notes'],
   },
   {
-    title: 'Reading outputs',
-    detail: 'Move from close reading to the whole argument.',
-    items: ['Aligned bilingual paragraphs', 'English whole-paper summary', 'Chinese whole-paper summary', 'Connected full translation', 'Markdown bundle with images'],
+    title: 'Choose models for your Mac',
+    summary: 'PaperBridge discovers local Ollama models instead of forcing a single configuration.',
+    detail: 'Use TranslateGemma 4B on lighter machines, a larger translation model when memory permits, and separate models for summary and explanation. Model choices remain local and editable.',
+    tags: ['Auto-detection', 'TranslateGemma', 'Separate roles', 'Retry failures'],
   },
   {
-    title: 'Local engines',
-    detail: 'Use the models that fit your Mac.',
-    items: ['Automatic Ollama model detection', 'TranslateGemma defaults', 'In-app local tool setup', 'MinerU when available', 'PDFKit visual fallback'],
+    title: 'Export a real document',
+    summary: 'Take the paper out of the app with its structure and resources intact.',
+    detail: 'Export bilingual Markdown, connected full translation, summaries, and analysis. Structured exports keep references to original figures, tables, and other local assets.',
+    tags: ['Markdown bundle', 'Image assets', 'Translated captions', 'Portable output'],
   },
 ]
 </script>
 
 <template>
-  <section ref="section" class="capabilities-section reveal-section" aria-labelledby="capabilities-title">
-    <div class="capabilities-intro"><p class="section-index">Everything in context</p><h2 id="capabilities-title">One paper.<br />Four ways deeper.</h2><p>The website demo mirrors the real app. Nothing here depends on uploading a paper to a cloud service.</p></div>
-    <div class="capability-list">
-      <button v-for="(capability, index) in capabilities" :key="capability.title" :class="{ active: active === index }" type="button" @click="active = index"><span>0{{ index + 1 }}</span><strong>{{ capability.title }}</strong><small>{{ capability.detail }}</small><i>↗</i></button>
+  <section id="capabilities" class="capabilities-section" aria-labelledby="capabilities-title">
+    <header>
+      <h2 id="capabilities-title">Built for the moments<br />where reading <em>slows down.</em></h2>
+      <p>PaperBridge connects close reading, local models, and faithful document output instead of treating them as separate tools.</p>
+    </header>
+
+    <div class="capabilities-layout">
+      <div class="capability-index" role="tablist" aria-label="PaperBridge capability areas">
+        <button
+          v-for="(capability, index) in capabilities"
+          :key="capability.title"
+          :class="{ active: active === index }"
+          type="button"
+          role="tab"
+          :aria-selected="active === index"
+          @click="active = index"
+        >
+          <span>{{ String(index + 1).padStart(2, '0') }}</span>
+          <p><b>{{ capability.title }}</b><small>{{ capability.summary }}</small></p>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 7 7-7 7" /></svg>
+        </button>
+      </div>
+
+      <Transition name="capability-swap" mode="out-in">
+        <article :key="active" class="capability-focus">
+          <span>{{ String(active + 1).padStart(2, '0') }}</span>
+          <h3>{{ capabilities[active]!.title }}</h3>
+          <p>{{ capabilities[active]!.detail }}</p>
+          <div><small v-for="tag in capabilities[active]!.tags" :key="tag">{{ tag }}</small></div>
+        </article>
+      </Transition>
     </div>
-    <Transition name="paper-view" mode="out-in"><div :key="active" class="capability-detail"><p>{{ capabilities[active]!.title }}</p><ul><li v-for="item in capabilities[active]!.items" :key="item">{{ item }}</li></ul></div></Transition>
   </section>
 </template>

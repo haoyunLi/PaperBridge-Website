@@ -1,87 +1,111 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useReveal } from '../composables/useReveal'
 
-const section = ref<HTMLElement | null>(null)
-const activeStep = ref(0)
-useReveal(section)
+type StepId = 'reconstruct' | 'protect' | 'translate' | 'package'
 
-const steps = [
-  {
-    number: '01',
-    title: 'Parse',
-    text: 'Rebuild the paper into structured Markdown with sections, figures, tables, formulas, and references.',
-    visual: 'parse',
-  },
-  {
-    number: '02',
-    title: 'Translate',
-    text: 'Translate natural paragraphs with local Ollama models while keeping scientific terms and layout intact.',
-    visual: 'translate',
-  },
-  {
-    number: '03',
-    title: 'Read',
-    text: 'Move between the original, bilingual reader, summary, and connected full translation without losing context.',
-    visual: 'read',
-  },
+const steps: { id: StepId; title: string; detail: string }[] = [
+  { id: 'reconstruct', title: 'Reconstruct the document', detail: 'MinerU identifies reading order and semantic blocks.' },
+  { id: 'protect', title: 'Protect scientific resources', detail: 'Figures, tables, formulas, and references get explicit roles.' },
+  { id: 'translate', title: 'Translate natural language', detail: 'Only translatable text goes to your local Ollama models.' },
+  { id: 'package', title: 'Build a portable paper', detail: 'Markdown exports keep structure and referenced assets together.' },
 ]
 
-const active = computed(() => steps[activeStep.value]!)
+const activeStep = ref<StepId>('reconstruct')
+const active = computed(() => steps.find((step) => step.id === activeStep.value)!)
 </script>
 
 <template>
-  <section id="workflow" ref="section" class="workflow-section reveal-section" aria-labelledby="workflow-title">
-    <div class="workflow-heading">
-      <h2 id="workflow-title">From PDF to understanding.</h2>
-      <p>PaperBridge reconstructs the document before it translates the words.</p>
-    </div>
+  <section id="workflow" class="workflow-section" aria-labelledby="workflow-title">
+    <header class="workflow-copy">
+      <h2 id="workflow-title">Translation begins with<br /><em>document structure.</em></h2>
+      <p>
+        PaperBridge does not flatten a paper into one long text stream. It first decides what
+        each block is, where it belongs, and whether it should be translated at all.
+      </p>
+    </header>
 
-    <div class="workflow-rail" role="tablist" aria-label="Paper processing steps">
-      <button
-        v-for="(step, index) in steps"
-        :key="step.number"
-        :class="{ active: activeStep === index }"
-        type="button"
-        role="tab"
-        :aria-selected="activeStep === index"
-        @click="activeStep = index"
-      >
-        <span>{{ step.number }}</span><strong>{{ step.title }}</strong><small>{{ step.text }}</small>
-      </button>
-      <i class="rail-progress" :style="{ width: `${(activeStep + 1) * 33.333}%` }"></i>
-    </div>
-
-    <div class="workflow-stage">
-      <div class="workflow-note">
-        <span>{{ active.number }}</span>
-        <h3>{{ active.title }} the paper.</h3>
-        <p>{{ active.text }}</p>
-        <div class="preserve-list">
-          <span>Figures</span><span>Tables</span><span>LaTeX</span><span>References</span>
-        </div>
+    <div class="workflow-console">
+      <div class="workflow-steps" role="tablist" aria-label="PaperBridge processing stages">
+        <button
+          v-for="step in steps"
+          :key="step.id"
+          :class="{ active: activeStep === step.id }"
+          type="button"
+          role="tab"
+          :aria-selected="activeStep === step.id"
+          @click="activeStep = step.id"
+        >
+          <i></i><span><b>{{ step.title }}</b><small>{{ step.detail }}</small></span>
+        </button>
       </div>
-      <Transition name="image-swap" mode="out-in">
-        <figure :key="active.visual" class="workflow-visual">
-          <div v-if="active.visual === 'parse'" class="parse-visual">
-            <header><span>attention-is-all-you-need.pdf</span><b>MinerU · Structured Markdown</b></header>
-            <div class="source-page"><small>PAGE 4</small><h4>3 Model Architecture</h4><p>The Transformer follows an encoder-decoder architecture using stacked self-attention.</p><div class="detected formula-detected"><i>FORMULA</i> Attention(Q, K, V) = softmax(QKᵀ / √d<sub>k</sub>)V</div><div class="detected figure-detected"><i>FIGURE</i><span>Inputs → Encoder → Attention → Outputs</span></div><div class="detected table-detected"><i>TABLE</i><span>Layer</span><span>Dimension</span><span>Heads</span></div></div>
-            <aside><strong>Detected structure</strong><span>12 sections</span><span>9 figures</span><span>4 tables</span><span>18 formulas</span><span>41 references excluded</span></aside>
+
+      <div class="workflow-output">
+        <header><span>transformer.pdf</span><b>{{ active.title }}</b></header>
+        <Transition name="console-swap" mode="out-in">
+          <div v-if="activeStep === 'reconstruct'" key="reconstruct" class="console-panel reconstruct-panel">
+            <div class="mini-paper">
+              <small>PAGE 3</small><h3>2 Model architecture</h3>
+              <p><span></span><span></span><span></span></p>
+              <div class="mini-figure"><i></i><i></i><i></i></div>
+              <p><span></span><span></span></p>
+            </div>
+            <div class="block-map">
+              <p><b>H1</b><span>Model architecture</span><small>heading</small></p>
+              <p><b>P</b><span>Natural language block</span><small>paragraph</small></p>
+              <p><b>FIG</b><span>figure_02.png</span><small>asset</small></p>
+              <p><b>CAP</b><span>Figure 2. Model overview</span><small>caption</small></p>
+              <footer><i></i> Semantic reading order established</footer>
+            </div>
           </div>
-          <div v-else-if="active.visual === 'translate'" class="translate-visual">
-            <header><span>Paper Reader</span><b>96 / 96 translated</b></header>
-            <article><small>ORIGINAL · ENGLISH</small><p>The model uses self-attention to connect every position in the sequence.</p><hr /><small>TRANSLATION · SIMPLIFIED CHINESE</small><p>该模型使用自注意力机制连接序列中的每个位置。</p></article>
-            <div class="resource-pair"><div><small>ƒ FORMULA · PRESERVED</small><p>softmax(QKᵀ / √d<sub>k</sub>)V</p></div><div><small>▧ FIGURE · PRESERVED</small><p>Caption → translated separately</p></div></div>
-            <footer><i></i><span>Translation is local. Scientific resources never enter the translation prompt.</span></footer>
+
+          <div v-else-if="activeStep === 'protect'" key="protect" class="console-panel protect-panel">
+            <div class="resource-ledger">
+              <div><b>Paragraph</b><span class="translate-status">Translate</span><p>Natural language with scientific terms preserved</p></div>
+              <div><b>Formula</b><span class="preserve-status">Preserve</span><p>$$ Attention(Q,K,V) = softmax(...) $$</p></div>
+              <div><b>Figure</b><span class="preserve-status">Preserve</span><p>assets/figure_02.png</p></div>
+              <div><b>Caption</b><span class="translate-status">Translate</span><p>Figure 2. Architecture of the model.</p></div>
+              <div><b>References</b><span class="skip-status">Skip</span><p>Reference section remains in the document.</p></div>
+            </div>
           </div>
-          <div v-else class="read-visual">
-            <header><span>Paper</span><span>Reader</span><span class="active">Summary</span><span>Full Translation</span></header>
-            <div class="summary-sheet"><small>WHOLE-PAPER SUMMARY · ENGLISH</small><h4>Attention-based sequence modeling</h4><p>The paper replaces recurrence with multi-head attention, improving parallelism and translation quality.</p><div><small>简体中文摘要</small><p>本文使用多头注意力机制替代循环结构，从而提高并行计算能力与机器翻译质量。</p></div></div>
-            <footer><span>Selected text tools</span><b>Translate</b><b>Explain</b><b>Highlight</b><b>Note</b><b>Bookmark</b></footer>
+
+          <div v-else-if="activeStep === 'translate'" key="translate" class="console-panel model-panel">
+            <div class="model-request">
+              <small>LOCAL REQUEST</small>
+              <p><b>Source</b> English</p><p><b>Target</b> Simplified Chinese</p>
+              <div>Preserve scientific meaning, named entities, gene symbols, protein names, units, and references. Return only the translated paragraph.</div>
+            </div>
+            <div class="local-model-flow">
+              <span>PaperBridge</span><i></i><strong>Ollama</strong><i></i><span>TranslateGemma</span>
+              <small>No cloud endpoint · model can be changed</small>
+            </div>
           </div>
-          <figcaption>PaperBridge interface simulation · {{ active.title }} stage</figcaption>
-        </figure>
-      </Transition>
+
+          <div v-else key="package" class="console-panel package-panel">
+            <div class="file-tree">
+              <p><b>paper-bilingual/</b></p>
+              <p><span></span><b>paper_bilingual.md</b><small>English + translation</small></p>
+              <p><span></span><b>paper_translated.md</b><small>Connected full translation</small></p>
+              <p><span></span><b>summary.md</b><small>English + Chinese</small></p>
+              <p><span></span><b>assets/</b><small>original figures and tables</small></p>
+              <p><span></span><span></span><b>figure_02.png</b></p>
+              <p><span></span><span></span><b>table_01.html</b></p>
+            </div>
+            <div class="export-preview">
+              <small>MARKDOWN PREVIEW</small>
+              <h3>## 2 模型架构</h3>
+              <p>该模型采用编码器—解码器架构……</p>
+              <code>![Figure 2](assets/figure_02.png)</code>
+              <p><b>图 2.</b> 模型整体架构。</p>
+            </div>
+          </div>
+        </Transition>
+      </div>
+    </div>
+
+    <div class="parser-note">
+      <strong>MinerU is optional, not a lock-in.</strong>
+      <p>When installed, it provides stronger layout reconstruction and formula recognition. Without it, macOS PDFKit keeps exact original pages available as a visual fallback.</p>
+      <a href="https://github.com/haoyunLi/PaperBridge#local-dependencies" target="_blank" rel="noreferrer">Read the local setup guide</a>
     </div>
   </section>
 </template>
