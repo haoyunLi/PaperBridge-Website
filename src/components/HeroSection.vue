@@ -66,11 +66,16 @@ onBeforeUnmount(() => window.clearInterval(timer))
         and keeps every figure, formula, table, and citation where it belongs.
       </p>
       <div class="hero-actions">
-        <a class="button button-primary" href="https://github.com/haoyunLi/PaperBridge#6-build-the-macos-app-from-terminal">
+        <a
+          class="button button-primary"
+          href="https://github.com/haoyunLi/PaperBridge/releases/latest"
+          target="_blank"
+          rel="noreferrer"
+        >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M16.9 13.5c0-2.8 2.3-4.2 2.4-4.3a5.2 5.2 0 0 0-4.1-2.2c-1.7-.2-3.4 1-4.3 1s-2.3-1-3.8-1c-2 0-3.8 1.2-4.8 3-2.1 3.7-.5 9.1 1.5 12 .9 1.4 2.1 3 3.6 2.9 1.5-.1 2.1-1 3.9-1 1.8 0 2.3 1 3.9 1 1.6 0 2.6-1.4 3.5-2.8a13 13 0 0 0 1.6-3.3 5.1 5.1 0 0 1-3.4-5.3ZM14 5.2A5 5 0 0 0 15.2 1a5.1 5.1 0 0 0-3.4 1.7 4.7 4.7 0 0 0-1.3 3.5A4.3 4.3 0 0 0 14 5.2Z" />
           </svg>
-          Build for macOS
+          Download for macOS
         </a>
         <a class="button button-text" href="#reader">
           Explore the live reader
@@ -78,7 +83,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
         </a>
       </div>
       <div class="hero-availability">
-        <span><i></i> macOS source available</span>
+        <span><i></i> v1.4 · Apple notarized</span>
         <span>Windows coming soon</span>
         <span>Open source</span>
       </div>

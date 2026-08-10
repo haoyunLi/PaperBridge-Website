@@ -67,7 +67,7 @@ Newsreader Variable is used for editorial promises, paper headings, and reading 
 
 ## Layout
 
-The page runs: sticky navigation, split hero, dark reconstruction workflow, cobalt live reader, capabilities, local-privacy proof, FAQ, coral build section, and footer. Content panels cap at 1400px; the hero caps at 1540px. The split hero stacks below 1200px, navigation collapses below 960px, and at 720px sidebars and secondary logs are removed while document pages, tabs, and primary controls remain operable without horizontal page overflow.
+The page runs: sticky navigation, split hero, dark reconstruction workflow, cobalt live reader, capabilities, local-privacy proof, FAQ, coral download section, and footer. Content panels cap at 1400px; the hero caps at 1540px. The split hero stacks below 1200px, navigation collapses below 960px, and at 720px sidebars and secondary logs are removed while document pages, tabs, and primary controls remain operable without horizontal page overflow.
 
 ## Elevation & Depth
 
@@ -88,9 +88,9 @@ Major demonstrations use 15–16px radii; controls and interior blocks use 5–1
 
 ## Do's and Don'ts
 
-- **Do** lead with the editorial promise and live workbench, with the accurate “Build for macOS” guide action above the fold.
+- **Do** lead with the editorial promise and live workbench, with the signed macOS download action above the fold.
 - **Do** keep original formulas, figures, tables, units, code, and identifiers visually distinct from translated prose; captions may be translated.
 - **Do** describe MinerU as optional, PDFKit as the exact visual fallback, and Ollama inference as local and configurable.
 - **Don't** replace the paper interface with a generic SaaS hero, screenshot carousel, card grid, gradient, or glass treatment.
-- **Don't** imply a signed download exists; macOS source is available through the terminal build guide, and Windows is coming soon without a download.
+- **Don't** offer a Windows download before it exists; keep it clearly labelled as coming soon.
 - **Don't** invent testimonials, customer logos, usage metrics, benchmarks, or cloud-processing claims.

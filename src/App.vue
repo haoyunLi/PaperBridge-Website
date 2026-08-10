@@ -27,7 +27,7 @@ import BrandMark from './components/BrandMark.vue'
       <nav aria-label="Footer navigation">
         <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://github.com/haoyunLi/PaperBridge#readme" target="_blank" rel="noreferrer">Documentation</a>
-        <a href="https://github.com/haoyunLi/PaperBridge/releases" target="_blank" rel="noreferrer">Releases</a>
+        <a href="https://github.com/haoyunLi/PaperBridge/releases/latest" target="_blank" rel="noreferrer">Download</a>
         <a href="#privacy">Privacy</a>
       </nav>
       <div><a href="mailto:info@paperbridges.net">info@paperbridges.net</a><span>© 2026 PaperBridge</span></div>

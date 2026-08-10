@@ -29,7 +29,13 @@ function closeMenu() {
       <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">
         GitHub
       </a>
-      <a class="header-download" href="https://github.com/haoyunLi/PaperBridge#6-build-the-macos-app-from-terminal" @click="closeMenu">Build for Mac</a>
+      <a
+        class="header-download"
+        href="https://github.com/haoyunLi/PaperBridge/releases/latest"
+        target="_blank"
+        rel="noreferrer"
+        @click="closeMenu"
+      >Download for Mac</a>
     </nav>
   </header>
 </template>
