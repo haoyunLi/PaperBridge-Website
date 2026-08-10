@@ -31,7 +31,7 @@ function closeMenu() {
       </a>
       <a
         class="header-download"
-        href="https://github.com/haoyunLi/PaperBridge/releases/latest"
+        href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg"
         target="_blank"
         rel="noreferrer"
         @click="closeMenu"

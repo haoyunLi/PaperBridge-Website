@@ -6,7 +6,7 @@
       <div class="download-actions">
         <a
           class="button download-primary"
-          href="https://github.com/haoyunLi/PaperBridge/releases/latest"
+          href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg"
           target="_blank"
           rel="noreferrer"
         >
@@ -25,7 +25,7 @@
         <span><i></i> v1.4 available now</span>
         <h3>PaperBridge for macOS</h3>
         <p>Universal Apple Silicon and Intel build, signed and notarized by Apple.</p>
-        <a href="https://github.com/haoyunLi/PaperBridge/releases/latest" target="_blank" rel="noreferrer">Open the download page</a>
+        <a href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg" target="_blank" rel="noreferrer">Download the signed app</a>
       </article>
       <article class="future-platform">
         <span>In development</span>

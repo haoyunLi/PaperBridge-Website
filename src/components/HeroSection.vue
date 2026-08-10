@@ -68,7 +68,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
       <div class="hero-actions">
         <a
           class="button button-primary"
-          href="https://github.com/haoyunLi/PaperBridge/releases/latest"
+          href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg"
           target="_blank"
           rel="noreferrer"
         >

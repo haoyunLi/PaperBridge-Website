@@ -33,7 +33,7 @@ Readers open or drag in a PDF, choose source and target languages, use automatic
 - Figures, standalone formulas, tables, units, code, and scientific identifiers are protected from ordinary paragraph translation.
 - A failed paragraph does not stop the rest of the paper, and individual failures can be retried.
 - The website is a static Vue 3 and TypeScript site deployed through AWS Amplify.
-- The signed and Apple-notarized Universal macOS app is available from the latest GitHub Release; download actions link to that release page.
+- The signed and Apple-notarized Universal macOS app is available from GitHub Releases; download actions link directly to the current DMG asset.
 - A Windows version is planned and may be labelled "coming soon," but it must not offer a download before it exists.
 
 ## Brand Commitments
