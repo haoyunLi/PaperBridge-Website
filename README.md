@@ -53,6 +53,6 @@ Production domain: [paperbridges.net](https://paperbridges.net)
 
 - latest macOS direct download: `https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg`
 - release details: `https://github.com/haoyunLi/PaperBridge/releases/latest`
-- current signed release: `v1.4` (Universal, Apple notarized)
+- current signed release: the latest GitHub Release (Universal, Apple notarized)
 - source: `https://github.com/haoyunLi/PaperBridge`
 - contact: `info@paperbridges.net`

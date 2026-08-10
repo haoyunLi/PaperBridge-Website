@@ -83,7 +83,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
         </a>
       </div>
       <div class="hero-availability">
-        <span><i></i> v1.4 · Apple notarized</span>
+        <span><i></i> Latest release · Apple notarized</span>
         <span>Windows coming soon</span>
         <span>Open source</span>
       </div>

@@ -22,7 +22,7 @@
 
     <div class="platform-status">
       <article class="available-platform">
-        <span><i></i> v1.4 available now</span>
+        <span><i></i> Latest version available</span>
         <h3>PaperBridge for macOS</h3>
         <p>Universal Apple Silicon and Intel build, signed and notarized by Apple.</p>
         <a href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg" target="_blank" rel="noreferrer">Download the signed app</a>
