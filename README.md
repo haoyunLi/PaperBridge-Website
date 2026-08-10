@@ -2,7 +2,7 @@
 
 Marketing and interactive product-demo website for [PaperBridge](https://github.com/haoyunLi/PaperBridge), built with Vue 3, TypeScript, and Vite.
 
-![PaperBridge website preview](./public/images/paperbridge-social.png)
+![PaperBridge website preview](./public/images/paperbridge-social-v4.png)
 
 The interactive demo mirrors the native macOS app: PDF and pasted-text sources, MinerU/PDFKit parsing, Ollama model status, Paper/Reader/Summary/Full Translation workspaces, selected-text tools, bilingual captions, and preserved figures and formulas.
 
