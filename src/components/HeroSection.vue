@@ -62,8 +62,9 @@ onBeforeUnmount(() => window.clearInterval(timer))
     <div class="hero-copy">
       <h1 id="hero-title">Read across languages.<br /><em>Keep the paper.</em></h1>
       <p class="hero-lede">
-        A native macOS reader that reconstructs academic PDFs, translates with local AI,
-        and keeps every figure, formula, table, and citation where it belongs.
+        Understand a paper in another language without leaving the original behind.
+        Read bilingual paragraphs, explain a difficult phrase, and keep figures,
+        formulas, and your own notes within reach. A native Mac app powered by local AI.
       </p>
       <div class="hero-actions">
         <a
@@ -87,6 +88,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
         <span>Windows coming soon</span>
         <span>Open source</span>
       </div>
+      <p class="hero-first-use">No Xcode or Homebrew needed. <a href="#getting-started">See what to install for your first paper.</a></p>
     </div>
 
     <div
@@ -228,3 +230,8 @@ onBeforeUnmount(() => window.clearInterval(timer))
     </div>
   </section>
 </template>
+
+<style scoped>
+.hero-first-use { margin: 18px 0 0; font-size: 0.8rem; line-height: 1.7; color: var(--ink-soft); }
+.hero-first-use a { color: var(--blue); text-underline-offset: 4px; }
+</style>

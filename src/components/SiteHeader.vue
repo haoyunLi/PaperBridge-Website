@@ -26,6 +26,7 @@ function closeMenu() {
       <a href="#reader" @click="closeMenu">Live reader</a>
       <a href="#workflow" @click="closeMenu">How it works</a>
       <a href="#capabilities" @click="closeMenu">Features</a>
+      <a href="#getting-started" @click="closeMenu">Getting started</a>
       <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">
         GitHub
       </a>

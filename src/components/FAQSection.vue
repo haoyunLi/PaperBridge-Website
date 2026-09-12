@@ -2,11 +2,19 @@
 const questions = [
   {
     question: 'Do I need MinerU?',
-    answer: 'No. MinerU is optional and gives stronger semantic reading order, formula recognition, tables, and figure extraction. PDFKit is built into macOS and remains available as an exact visual fallback.',
+    answer: 'MinerU is optional but strongly recommended for the best reading experience: semantic reading order, formula recognition, tables, and figures. It has its own page in the setup guide, after the translation model. PDFKit is built into macOS and preserves the exact visual source when MinerU is unavailable. Neither parser guarantees perfect paragraph boundaries for every PDF.',
   },
   {
     question: 'Which Ollama model should I install?',
-    answer: 'TranslateGemma 4B is the lightweight translation default for many Macs. PaperBridge detects installed Ollama models, so you can assign other compatible models to translation, summary, and explanation based on available memory.',
+    answer: 'The setup guide offers TranslateGemma 4B, 12B, and 27B. Choose a size that fits your Mac’s memory; larger models need more memory and may be slower. Separate summary and explanation models are optional. PaperBridge detects installed Ollama models and lets you change each role in settings.',
+  },
+  {
+    question: 'Do I need Xcode, Homebrew, or Terminal?',
+    answer: 'Not to use the signed macOS download. Open the app and follow the setup guide for Ollama, a translation model, recommended MinerU, and optional explanation models. Reopen the guide from PaperBridge > PaperBridge Getting Started. Xcode is only needed to build from source.',
+  },
+  {
+    question: 'Are the new reading features available in the download?',
+    answer: 'Yes. PaperBridge 1.9 includes the paper library, section translation, saved terminology, source-linked summaries, reading controls, and safer paragraph repairs. Download the latest signed Mac app, or choose Check for Updates inside PaperBridge. Original layout recovery and AI accuracy still depend on the paper and your local models.',
   },
   {
     question: 'What happens if one paragraph fails?',

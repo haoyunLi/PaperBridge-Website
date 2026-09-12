@@ -15,7 +15,7 @@ const exportReady = ref(false)
 const activeLabel = computed(() => {
   if (activeView.value === 'reader') return 'Bilingual reader'
   if (activeView.value === 'summary') return 'Whole-paper summary'
-  return 'Connected translation'
+  return 'Full translation'
 })
 
 function changeView(view: ReaderView) {
@@ -37,7 +37,8 @@ function toggleSelection(view: ReaderView) {
       <p>
         Read the argument in sequence, inspect the original beside every translation, and
         act on the exact phrase that needs attention. This simulation is built from interface
-        elements, not screenshots.
+        elements, not screenshots. It uses fixed English / Simplified Chinese sample content;
+        the language controls illustrate settings, not live translation.
       </p>
       <div class="reader-proof">
         <span>Choose a view</span>
@@ -152,19 +153,20 @@ function toggleSelection(view: ReaderView) {
             </article>
 
             <article v-else key="full" class="reader-page full-page">
-              <header><small>CONNECTED TRANSLATION</small><h3>3 方法</h3><span>Structure preserved</span></header>
+              <header><small>STRUCTURE-PRESERVING TRANSLATION</small><h3>3 方法</h3><span>Structure preserved</span></header>
               <p>
                 我们训练一个共享编码器，使其从多个数据来源中学习可迁移的表征。
                 与仅针对单一任务训练的模型相比，该方法在标注样本有限时更加稳定。
               </p>
               <div class="full-formula"><small>原始公式</small><p>z = f<sub>θ</sub>(x), &nbsp; y = g<sub>φ</sub>(z)</p></div>
               <section class="research-resource figure-resource compact">
-                <div class="model-diagram"><span>数据</span><i></i><span>共享编码器</span><i></i><span>任务头</span></div>
+                <div class="model-diagram"><span>Input</span><i></i><span>Encoder</span><i></i><span>Task head</span><i></i><span>Prediction</span></div>
                 <p><b>图 3.</b> 原图保持不变，仅图注被翻译。</p>
                 <small>Image asset retained in exported Markdown</small>
               </section>
               <h4>3.1 训练策略</h4>
-              <p>训练过程交替采样不同任务，并使用统一的归一化目标。全文翻译连接前后段落，而不是简单复制逐段结果。</p>
+              <p>训练过程交替采样不同任务，并使用统一的归一化目标。</p>
+                <p class="summary-note">MinerU documents reuse the translated blocks in their original structural order. The full view is not a second contextual rewrite. Formula and image resources remain unchanged.</p>
             </article>
           </Transition>
         </main>
@@ -176,7 +178,7 @@ function toggleSelection(view: ReaderView) {
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v17l-7-4-7 4V4Z" /></svg>
           {{ noteSaved ? 'Bookmark saved' : 'Bookmark this view' }}
         </button>
-        <span>All processing remains on this Mac</span>
+        <span>Browser simulation · no model requests</span>
       </footer>
     </div>
   </section>

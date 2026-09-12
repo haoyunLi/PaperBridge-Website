@@ -12,6 +12,7 @@
     <div class="privacy-copy">
       <h2 id="privacy-title">The shortest route is<br /><em>paper to your Mac.</em></h2>
       <p>There is no PaperBridge cloud between your research and the models you choose. PDF parsing, translation, summary, explanation, caching, and export happen on your device.</p>
+      <p>Tool and model downloads, update checks, and links you open use the internet. Local workspace recovery is not a cloud backup; keep exports of important work.</p>
       <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">Inspect the source on GitHub</a>
     </div>
     <div class="privacy-ledger">
