@@ -85,7 +85,7 @@ function toggleSelection(view: ReaderView) {
           <div class="reader-viewbar">
             <div role="tablist" aria-label="Reading views">
               <button :class="{ active: activeView === 'reader' }" type="button" role="tab" :aria-selected="activeView === 'reader'" @click="changeView('reader')">Reader</button>
-              <button :class="{ active: activeView === 'summary' }" type="button" role="tab" :aria-selected="activeView === 'summary'" @click="changeView('summary')">Summary</button>
+              <button :class="{ active: activeView === 'summary' }" type="button" role="tab" :aria-selected="activeView === 'summary'" @click="changeView('summary')">Overview</button>
               <button :class="{ active: activeView === 'full' }" type="button" role="tab" :aria-selected="activeView === 'full'" @click="changeView('full')">Full translation</button>
             </div>
             <span>{{ activeLabel }}</span>

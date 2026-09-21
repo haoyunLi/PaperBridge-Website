@@ -14,7 +14,7 @@ const questions = [
   },
   {
     question: 'Are the new reading features available in the download?',
-    answer: 'Yes. PaperBridge 1.9 includes the paper library, section translation, saved terminology, source-linked summaries, reading controls, and safer paragraph repairs. Download the latest signed Mac app, or choose Check for Updates inside PaperBridge. Original layout recovery and AI accuracy still depend on the paper and your local models.',
+    answer: 'Yes. PaperBridge 1.9.1 adds automatic note saving, reading Back / Forward, compact bilingual headings, and visible save status to the library, section translation, saved terminology, and source-linked summaries introduced in 1.9. Download the latest signed Mac app, or choose Check for Updates inside PaperBridge. Local recovery is not an independent backup; PDF reconstruction and AI accuracy still depend on the paper and your local models.',
   },
   {
     question: 'What happens if one paragraph fails?',

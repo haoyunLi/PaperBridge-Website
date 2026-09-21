@@ -6,16 +6,16 @@ Marketing and interactive product-demo website for [PaperBridge](https://github.
 
 The interactive examples explain the native macOS workflow: PDF reconstruction with MinerU/PDFKit, local Ollama models, bilingual reading, summaries, selected-text tools, translated captions, and preserved figures and formulas. They use illustrative content, not screenshots or live AI. Language controls demonstrate app settings; the sample content stays English / Simplified Chinese.
 
-## Reading reliability in 1.9
+## Reading continuity in 1.9.1
 
 The `#reading-update` section demonstrates four locally implemented app improvements:
 
 - Resume a stopped translation without repeating saved blocks; stop and resume the simulated task.
-- Remove a highlight while keeping its note, edit the note, and undo the change.
-- Scroll or jump to a passage, visit Overview, and return to the saved block; search stays above the scrollable text.
+- Edit a note with automatic save feedback, switch examples and return, or remove a highlight while keeping its note. Save Now and undo remain available.
+- Follow a source from Overview, use Back / Forward to retrace the jump, or return to the saved block; search stays above the scrollable text.
 - Open a detected section from the source reading map. The displayed excerpt remains exactly the same in the example Reader, with no generated answer.
 
-These features ship in **PaperBridge 1.9**. Its timers illustrate progress and are not performance claims. The browser examples make no document uploads or model requests. Demo notes are memory-only and disappear on page reload.
+The note-autosave and Back / Forward improvements ship in **PaperBridge 1.9.1**, alongside compact bilingual headings and persistent progress/save status. The earlier reliability tools shipped in 1.9. Demo timers illustrate states and are not performance claims. Browser examples make no document uploads or model requests; notes are memory-only and disappear on page reload. App reading history is session-only; force quit during the short autosave delay can lose the latest keystrokes.
 
 The app README includes matching feature descriptions and verification notes in `docs/reliability-update.md`. Version 1.9 contains the six reading-efficiency features below. Comprehensive paragraph reconstruction and semantic verification of AI claims are not promised.
 
@@ -95,7 +95,7 @@ Run `npm run build` for TypeScript checks and a production build, then verify th
 
 Local checks covered desktop/mobile layouts, feature/setup choices, and the four interactive examples, with no console errors or external demo requests. The former feature dropdown has been replaced with accessible disclosure buttons; verify Enter/Space, independent expansion, expand/collapse all, and no focusable links inside collapsed chapters. The design detector reports intermediate type sizes absent from the sparse `DESIGN.md` ramp; existing typography and palette were preserved rather than rewriting the design system during this feature task.
 
-The earlier chapter presentation was checked at 1440px, 1024px, 390px, and 320px. The six-feature extension keeps that presentation rather than bringing back the disliked dropdown or screenshot swaps. Availability wording marks the newly released features as New in 1.9.
+The earlier chapter presentation was checked at 1440px, 1024px, 390px, and 320px. The six-feature extension keeps that presentation rather than bringing back the disliked dropdown or screenshot swaps. The 1.9.1 continuity examples were checked at 1440px and 390px, with no page overflow or console errors: note autosave, scenario switching, highlight removal, undo, source navigation, and Back / Forward. Availability wording distinguishes the 1.9 tools from the 1.9.1 fixes.
 
 The extension passed production build and Chrome checks at 1440x1000, 390x844, and 320x740. All eighteen descriptions were present; the six practices responded correctly, including Enter expansion, cancelled section work retaining results, no-match library search, term saving, source quotations, and reading controls. No console errors or horizontal overflow were found. The small-screen reading example now places navigation above the text. Native Browser plugin was unavailable, so an isolated Playwright/Chrome session was used, with no personal browser profile. Visual review was performed in-thread; the existing sparse design-type-ramp advisories remain, and no design-system rewrite was made.
 

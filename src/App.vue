@@ -33,7 +33,7 @@ import BrandMark from './components/BrandMark.vue'
         <a href="https://github.com/haoyunLi/PaperBridge#readme" target="_blank" rel="noreferrer">Documentation</a>
         <a href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg" target="_blank" rel="noreferrer">Download</a>
         <a href="#privacy">Privacy</a>
-        <a href="#reading-update">New in 1.9</a>
+        <a href="#reading-update">New in 1.9.1</a>
       </nav>
       <div><a href="mailto:info@paperbridges.net">info@paperbridges.net</a><span>© 2026 PaperBridge</span></div>
     </footer>

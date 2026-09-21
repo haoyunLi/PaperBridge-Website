@@ -129,7 +129,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
           <nav class="workbench-tabs" aria-label="Simulated PaperBridge views">
             <span class="view-label">Paper</span>
             <span class="view-label active">Reader</span>
-            <span class="view-label">Summary</span>
+            <span class="view-label">Overview</span>
             <span class="view-label">Full translation</span>
             <span>EN <i></i> 简中</span>
           </nav>

@@ -5,8 +5,8 @@ type Scenario = 'resume' | 'notes' | 'place' | 'map'
 type BlockStatus = 'saved' | 'pending' | 'failed' | 'working' | 'done'
 const scenarios: { id: Scenario; title: string; detail: string }[] = [
   { id: 'resume', title: 'Resume, not restart', detail: 'Keep completed translations. Pick up the unfinished blocks.' },
-  { id: 'notes', title: 'Keep the thought', detail: 'Remove a highlight without removing the note attached to it.' },
-  { id: 'place', title: 'Return to your place', detail: 'Visit Overview, then come back to the block you were reading.' },
+  { id: 'notes', title: 'Keep the thought', detail: 'Notes save as you write. Removing a highlight keeps the thought.' },
+  { id: 'place', title: 'Return to your place', detail: 'Follow a source, then use Back to return to your reading.' },
   { id: 'map', title: 'Start from the source', detail: 'Find the method or limitations without downloading a model.' },
 ]
 const active = ref<Scenario>('resume')
@@ -63,6 +63,8 @@ const savedNote = ref('Check how well the method transfers to a smaller dataset.
 const noteDraft = ref(savedNote.value)
 const noteHistory = ref<{ highlighted: boolean; note: string }[]>([])
 const noteStatus = ref('A highlight and a note are attached to the selected passage.')
+let noteTimer: ReturnType<typeof setTimeout> | undefined
+let noteEditing = false
 
 function rememberNote() {
   noteHistory.value.push({ highlighted: highlighted.value, note: savedNote.value })
@@ -70,18 +72,37 @@ function rememberNote() {
 }
 
 function toggleHighlight() {
+  saveNote()
+  noteEditing = false
   rememberNote()
   highlighted.value = !highlighted.value
   noteStatus.value = highlighted.value ? 'Highlight restored. Your note is unchanged.' : 'Highlight removed. Your note is still saved.'
 }
 
+function editNote(event: Event) {
+  if (!noteEditing) rememberNote()
+  noteEditing = true
+  noteDraft.value = (event.target as HTMLTextAreaElement).value
+  noteStatus.value = 'Saving note in this demo...'
+  clearTimeout(noteTimer)
+  noteTimer = setTimeout(saveNote, 350)
+}
+
 function saveNote() {
-  rememberNote()
-  savedNote.value = noteDraft.value.trim()
-  noteStatus.value = savedNote.value ? 'Note saved in this demo. No data is sent anywhere.' : 'Note cleared. Highlight state is unchanged.'
+  clearTimeout(noteTimer)
+  if (savedNote.value === noteDraft.value) return
+  savedNote.value = noteDraft.value
+  noteStatus.value = savedNote.value ? 'Note saved automatically in this demo. No data is sent anywhere.' : 'Note cleared. Highlight state is unchanged.'
+}
+
+function finishNote() {
+  saveNote()
+  noteEditing = false
 }
 
 function undoNote() {
+  clearTimeout(noteTimer)
+  noteEditing = false
   const previous = noteHistory.value.pop()
   if (!previous) return
   highlighted.value = previous.highlighted
@@ -103,6 +124,29 @@ const readingBlock = ref(0)
 const savedBlock = ref(0)
 const search = ref('')
 const mapPassage = ref<number | null>(null)
+type DemoLocation = { view: 'reader' | 'summary'; block: number; search: string }
+const backHistory = ref<DemoLocation[]>([])
+const forwardHistory = ref<DemoLocation[]>([])
+const location = (): DemoLocation => ({ view: readerView.value, block: readerView.value === 'reader' ? readingBlock.value : savedBlock.value, search: search.value })
+
+function rememberLocation() {
+  backHistory.value.push(location())
+  if (backHistory.value.length > 50) backHistory.value.shift()
+  forwardHistory.value = []
+}
+
+async function travel(direction: 'back' | 'forward') {
+  const history = direction === 'back' ? backHistory : forwardHistory
+  const destination = history.value.pop()
+  if (!destination) return
+  const opposite = direction === 'back' ? forwardHistory : backHistory
+  opposite.value.push(location())
+  readerView.value = destination.view
+  search.value = destination.search
+  savedBlock.value = destination.block
+  readingBlock.value = destination.block
+  if (destination.view === 'reader') await scrollToBlock(destination.block)
+}
 const visiblePassages = computed(() => passages.map((passage, index) => ({ ...passage, index }))
   .filter(passage => `${passage.title} ${passage.text}`.toLowerCase().includes(search.value.trim().toLowerCase())))
 
@@ -134,17 +178,20 @@ async function changeReader(view: 'reader' | 'summary') {
 }
 
 async function jumpToMethod() {
+  rememberLocation()
+  readerView.value = 'reader'
   search.value = ''
   await scrollToBlock(1)
 }
 
 async function selectScenario(scenario: Scenario) {
   if (running.value) cancel()
+  finishNote()
   active.value = scenario
   if (scenario === 'place' && readerView.value === 'reader') await scrollToBlock(readingBlock.value)
 }
 
-onBeforeUnmount(stop)
+onBeforeUnmount(() => { stop(); clearTimeout(noteTimer) })
 </script>
 
 <template>
@@ -152,8 +199,8 @@ onBeforeUnmount(stop)
     <header class="update-heading">
       <h2 id="reading-update-title">Less retracing.<br /><em>More reading.</em></h2>
       <div>
-        <p>PaperBridge 1.9 gives you a clearer place to begin, then protects the work around the paper: translations, notes, and the passage you left off.</p>
-        <p class="update-availability"><strong>New in PaperBridge 1.9.</strong> Available in the latest signed Mac download. These examples run in your browser, without files or AI requests.</p>
+        <p>Follow a source without losing your place. Write a note without remembering to save it. PaperBridge keeps the small interruptions out of your next reading session.</p>
+        <p class="update-availability"><strong>Updated in PaperBridge 1.9.1.</strong> Automatic note saving, reading Back / Forward, compact bilingual headings, and visible save status. Available in the latest signed Mac download.</p>
       </div>
     </header>
 
@@ -164,7 +211,7 @@ onBeforeUnmount(stop)
           @click="selectScenario(scenario.id)">
           <strong>{{ scenario.title }}</strong><span>{{ scenario.detail }}</span>
         </button>
-        <a href="https://github.com/haoyunLi/PaperBridge#reading-reliability-in-19" target="_blank" rel="noreferrer">Read the release notes</a>
+        <a href="https://github.com/haoyunLi/PaperBridge/releases/tag/v1.9.1" target="_blank" rel="noreferrer">Read the release notes</a>
       </div>
 
       <div id="update-demo-panel" class="update-demo-panel">
@@ -188,18 +235,18 @@ onBeforeUnmount(stop)
         </div>
 
         <div v-else-if="active === 'notes'" class="notes-example">
-          <h3>A color can change.<br />The thought should stay.</h3>
+          <h3>Write the thought.<br />We remember the save.</h3>
           <blockquote>The model learns <mark :class="{ highlighted }">reusable representations</mark> before adapting to a new task.</blockquote>
           <label for="preview-note">Note attached to this passage</label>
-          <textarea id="preview-note" v-model="noteDraft" rows="2" maxlength="500"></textarea>
+          <textarea id="preview-note" :value="noteDraft" rows="2" maxlength="500" @input="editNote" @blur="finishNote"></textarea>
           <div class="update-actions">
             <button type="button" class="update-primary" @click="toggleHighlight">{{ highlighted ? 'Remove highlight' : 'Restore highlight' }}</button>
-            <button type="button" :disabled="savedNote === noteDraft.trim()" @click="saveNote">Save note</button>
+            <button type="button" :disabled="savedNote === noteDraft" @click="saveNote">Save Now</button>
             <button type="button" :disabled="!noteHistory.length" @click="undoNote">Undo change</button>
           </div>
           <p class="saved-note"><strong>Saved note</strong>{{ savedNote || 'No saved note.' }}</p>
           <p class="update-feedback" role="status">{{ noteStatus }}</p>
-          <small class="update-footnote">This demo resets on page reload. The app saves notes locally; its annotation undo history is session-only.</small>
+          <small class="update-footnote">Type, then switch examples and return. Demo notes are memory-only and reset on page reload. The app saves on your Mac; force quit during the brief typing delay can lose the last keystrokes.</small>
         </div>
 
         <div v-else-if="active === 'place'" class="place-example">
@@ -207,6 +254,11 @@ onBeforeUnmount(stop)
             <button type="button" :aria-pressed="readerView === 'reader'" @click="changeReader('reader')">Reader</button>
             <button type="button" :aria-pressed="readerView === 'summary'" @click="changeReader('summary')">Overview</button>
             <span>Block {{ (readerView === 'reader' ? readingBlock : savedBlock) + 1 }} / {{ passages.length }}</span>
+          </div>
+          <div class="reading-history" aria-label="Example reading history">
+            <button type="button" :disabled="!backHistory.length" @click="travel('back')">Back</button>
+            <button type="button" :disabled="!forwardHistory.length" @click="travel('forward')">Forward</button>
+            <span>Follow a passage. Keep your way back.</span>
           </div>
           <template v-if="readerView === 'reader'">
             <div class="place-search">
@@ -225,10 +277,11 @@ onBeforeUnmount(stop)
             <h3>The reading question</h3>
             <p>How does a reusable representation help when labelled data is limited? Check the method, evaluation, and limitations together.</p>
             <p>Your place is saved at <strong>{{ passages[savedBlock]!.title }}</strong>.</p>
+            <button type="button" @click="jumpToMethod">Read the Method source</button>
             <button type="button" class="update-primary" @click="changeReader('reader')">Return to saved passage</button>
           </div>
-          <p class="update-feedback">Try “Go to Method”, open Overview, then return. The search controls stay above the scrolling paper.</p>
-          <small class="update-footnote">Fictional sample text. App restoration is by Reader block, PDF page, or Markdown viewport, not exact word position.</small>
+          <p class="update-feedback">Open Overview, follow “Read the Method source”, then press Back. You return to Overview, not the start of the paper.</p>
+          <small class="update-footnote">Fictional sample text. App Back / Forward is session-only and resets on paper changes or structural repairs. Restoration is by Reader block, PDF page, or Markdown viewport, not exact word position.</small>
         </div>
 
         <div v-else class="map-example">
@@ -256,8 +309,10 @@ onBeforeUnmount(stop)
     </div>
 
     <details class="update-more">
-      <summary>Also included in PaperBridge 1.9</summary>
+      <summary>More ways the latest PaperBridge protects your reading</summary>
       <ul>
+        <li>Standalone section titles use compact bilingual rows, leaving more room for the actual paper.</li>
+        <li>Progress and save status stay above the scrolling document. Failed local saves offer Retry Save; keep the app open or export until saving succeeds.</li>
         <li>Restored summaries and translations survive unrelated parser or lookup setting changes.</li>
         <li>PDF annotations keep the actual selection, including repeated words and multiple pages. Unresolvable anchors are reported rather than guessed.</li>
         <li>Markdown highlights update without reloading the preview. Bookmarks show passage text, and narrow windows use a bottom inspector.</li>
@@ -330,6 +385,10 @@ progress::-moz-progress-bar { background: var(--blue); }
 .place-toolbar { display: flex; align-items: center; gap: 8px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .place-toolbar button[aria-pressed=true] { background: var(--blue-pale); border-color: var(--blue); color: var(--blue-dark); }
 .place-toolbar span { margin-left: auto; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.reading-history { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 14px; }
+.reading-history span { color: var(--ink-soft); font-size: 0.8rem; }
+.place-example button:disabled { opacity: 0.55; cursor: default; }
+.place-summary button + button { margin-left: 8px; }
 .place-search { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 14px 0; }
 .place-search label { grid-column: 1 / -1; font-size: 0.75rem; font-weight: 700; }
 .place-search input { min-width: 0; width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper-light); color: var(--ink); caret-color: var(--blue); font-size: 0.82rem; }
@@ -350,7 +409,7 @@ textarea:focus-visible, input:focus-visible, .place-scroll:focus-visible { outli
 @media (max-width: 960px) {
   .update-heading { grid-template-columns: 1fr; gap: 22px; }
   .update-workbench { grid-template-columns: 1fr; gap: 24px; }
-  .update-index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .update-index { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .update-index button { padding: 16px; }
   .update-index button span { display: none; }
   .update-index a { grid-column: 1 / -1; margin: 18px 0 0; }

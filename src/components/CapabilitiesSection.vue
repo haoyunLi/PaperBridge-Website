@@ -70,7 +70,7 @@ function toggleAll() {
         </Transition>
       </article>
     </div>
-    <p class="feature-boundary">Available in PaperBridge 1.9. Download links serve the latest signed release. Website examples are illustrative, not live AI output.</p>
+    <p class="feature-boundary">Available in PaperBridge 1.9.1, including the reading tools introduced in 1.9. Download links serve the latest signed release. Website examples are illustrative, not live AI output.</p>
   </section>
 </template>
 
