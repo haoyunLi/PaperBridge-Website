@@ -6,7 +6,7 @@ type StepId = 'reconstruct' | 'protect' | 'translate' | 'package'
 const steps: { id: StepId; title: string; detail: string }[] = [
   { id: 'reconstruct', title: 'Reconstruct the document', detail: 'MinerU identifies reading order and semantic blocks.' },
   { id: 'protect', title: 'Protect scientific resources', detail: 'Figures, tables, formulas, and references get explicit roles.' },
-  { id: 'translate', title: 'Translate natural language', detail: 'Only translatable text goes to your local Ollama models.' },
+  { id: 'translate', title: 'Translate natural language', detail: 'Text goes to Ollama by default, or to OpenAI with your consent.' },
   { id: 'package', title: 'Build a portable paper', detail: 'Markdown exports keep structure and referenced assets together.' },
 ]
 
@@ -70,13 +70,13 @@ const active = computed(() => steps.find((step) => step.id === activeStep.value)
 
           <div v-else-if="activeStep === 'translate'" key="translate" class="console-panel model-panel">
             <div class="model-request">
-              <small>LOCAL REQUEST</small>
+              <small>LOCAL OLLAMA EXAMPLE</small>
               <p><b>Source</b> English</p><p><b>Target</b> Simplified Chinese</p>
               <div>Preserve scientific meaning, named entities, gene symbols, protein names, units, and references. Return only the translated paragraph.</div>
             </div>
             <div class="local-model-flow">
               <span>PaperBridge</span><i></i><strong>Ollama</strong><i></i><span>TranslateGemma</span>
-              <small>No cloud endpoint · model can be changed</small>
+              <small>Local route shown · provider and task models are your choice</small>
             </div>
           </div>
 

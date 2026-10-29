@@ -2,7 +2,7 @@
   <section id="download" class="download-section" aria-labelledby="download-title">
     <div class="download-copy">
       <h2 id="download-title">Your next paper,<br /><em>closer.</em></h2>
-      <p>Read across languages without sending the paper away or flattening the science.</p>
+      <p>Keep the original, figures, and formulas in view. Read with local Ollama or explicitly opt in to OpenAI text processing.</p>
       <div class="download-actions">
         <a
           class="button download-primary"
@@ -22,9 +22,9 @@
 
     <div class="platform-status">
       <article class="available-platform">
-        <span><i></i> Latest version available</span>
+        <span><i></i> Version 1.10.0</span>
         <h3>PaperBridge for macOS</h3>
-        <p>Universal Apple Silicon and Intel build, signed and notarized by Apple.</p>
+        <p>Universal Apple Silicon and Intel build, Developer ID signed and Apple notarized. Local by default, OpenAI optional.</p>
         <a href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg" target="_blank" rel="noreferrer">Download the signed app</a>
       </article>
       <article class="future-platform">

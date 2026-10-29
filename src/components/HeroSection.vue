@@ -64,7 +64,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
       <p class="hero-lede">
         Understand a paper in another language without leaving the original behind.
         Read bilingual paragraphs, explain a difficult phrase, and keep figures,
-        formulas, and your own notes within reach. A native Mac app powered by local AI.
+        formulas, and your own notes within reach. Local Ollama by default, with OpenAI when you choose it.
       </p>
       <div class="hero-actions">
         <a
@@ -84,11 +84,12 @@ onBeforeUnmount(() => window.clearInterval(timer))
         </a>
       </div>
       <div class="hero-availability">
-        <span><i></i> Latest release · Apple notarized</span>
+        <span><i></i> 1.10.0 · Apple notarized</span>
         <span>Windows coming soon</span>
         <span>Open source</span>
       </div>
       <p class="hero-first-use">No Xcode or Homebrew needed. <a href="#getting-started">See what to install for your first paper.</a></p>
+      <p class="hero-first-use"><a href="#ai-providers">New in 1.10.0: explore local and OpenAI options.</a></p>
     </div>
 
     <div
@@ -139,7 +140,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
               <div class="drop-target">
                 <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 5h14l8 8v30H14V5Z" /><path d="M28 5v9h8M19 25h12M19 31h9" /></svg>
                 <strong>Drop an academic PDF</strong>
-                <p>The file opens directly from your Mac. Nothing is uploaded.</p>
+                <p>PDF import runs on your Mac. This illustration follows the local Ollama route.</p>
                 <button type="button" @click="choosePhase('structure')">Use sample paper</button>
               </div>
             </div>

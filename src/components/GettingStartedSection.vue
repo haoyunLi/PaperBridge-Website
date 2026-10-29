@@ -3,16 +3,22 @@ import { computed, ref } from 'vue'
 
 const routes = [
   { id: 'read', label: 'Read & annotate', title: 'Begin with no model downloads.', detail: 'Open an existing PDF, inspect its original pages, and mark selectable text. Add AI later when you need it.' },
-  { id: 'translate', label: 'Translate a paper', title: 'Add a translator. Keep everything local.', detail: 'Choose a translation model that fits your Mac. MinerU is a separate, recommended step for papers with complex layouts.' },
-  { id: 'explain', label: 'Explain & summarize', title: 'Add an assistant for the difficult parts.', detail: 'An explanation model is optional. Use it to unpack a phrase or get a shorter overview, then check the original.' },
+  { id: 'translate', label: 'Translate with Ollama', title: 'Add a translator. Keep inference local.', detail: 'Choose a translation model that fits your Mac. MinerU is a separate, recommended step for papers with complex layouts.' },
+  { id: 'explain', label: 'Explain & summarize locally', title: 'Add an assistant for the difficult parts.', detail: 'An explanation model is optional. Use it to unpack a phrase or get a shorter overview, then check the original.' },
+  { id: 'openai', label: 'Use OpenAI instead', title: 'Choose online AI. Keep control of the text.', detail: 'No Ollama download is needed for this route. PDF parsing remains local; text processing requires your own API key, chosen models, and session consent.' },
 ]
 const routeID = ref('translate')
 const route = computed(() => routes.find(item => item.id === routeID.value)!)
 const steps = computed(() => [
   { title: 'Install PaperBridge', badge: 'Required', detail: 'Download the DMG, open it, and drag PaperBridge into Applications. Launch it from there.' },
-  ...(routeID.value !== 'read' ? [
-    { title: 'Start Ollama', badge: 'Required for AI', detail: 'The first-run guide can install or open Ollama. Leave it running while you translate or analyze.' },
+  ...(routeID.value === 'translate' || routeID.value === 'explain' ? [
+    { title: 'Start Ollama', badge: 'Local AI only', detail: 'The first-run guide can install or open Ollama. Leave it running while you translate or analyze.' },
     ...(routeID.value === 'translate' ? [{ title: 'Choose TranslateGemma', badge: 'Translation', detail: 'The guide offers 4B, 12B, and 27B. Start with the smaller model if memory is limited; larger models need more resources.' }] : []),
+  ] : []),
+  ...(routeID.value === 'openai' ? [
+    { title: 'Open Settings > Models > OpenAI', badge: 'Explicit choice', detail: 'Save your API key in the Mac app. It uses the local macOS Keychain with iCloud synchronization disabled, never settings or exports. Normal backup or migration can include the Keychain.' },
+    { title: 'Choose four task models', badge: 'No default', detail: 'Set translation, summary, paragraph explanation, and quick lookup models your API project can access. Refresh lists model IDs without inference; it does not establish capability or price. Manual IDs are supported.' },
+    { title: 'Review sharing and confirm consent', badge: 'Each session', detail: 'Selection help includes nearby context, title, and matching terms. Full translation and summary send full extracted text in batches, not PDF files or images. API usage is paid separately from ChatGPT. Start each task yourself; there is no automatic cloud fallback.' },
   ] : []),
   { title: 'Consider MinerU', badge: 'Recommended', detail: 'A separate setup page installs the local parser for better reading order, formulas, figures, tables, and Markdown. PDFKit works without it; scanned text needs OCR.' },
   ...(routeID.value === 'explain' ? [{ title: 'Add an explanation model', badge: 'Optional capability', detail: 'Choose a small Gemma or Qwen assistant from the guide, or use an installed model. Select its summary and explanation roles in Settings.' }] : []),
@@ -40,7 +46,7 @@ const steps = computed(() => [
       <ol>
         <li v-for="step in steps" :key="step.title"><div><h4>{{ step.title }}</h4><span>{{ step.badge }}</span></div><p>{{ step.detail }}</p></li>
       </ol>
-      <p class="setup-return">You can reopen the guide at <strong>PaperBridge → PaperBridge Getting Started</strong>, or from <strong>Settings → Local AI</strong>. Initial tool and model downloads need internet; document analysis uses local models.</p>
+      <p class="setup-return">Reopen local setup at <strong>PaperBridge → PaperBridge Getting Started</strong> or <strong>Settings → Local AI</strong>. Choose optional OpenAI at <strong>Settings → Models</strong>. Downloads, updates, and OpenAI requests use the internet; Ollama inference stays local. <a href="#ai-providers">Explore the provider and data-sharing example.</a></p>
     </div>
   </section>
 </template>

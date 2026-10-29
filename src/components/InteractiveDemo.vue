@@ -38,7 +38,8 @@ function toggleSelection(view: ReaderView) {
         Read the argument in sequence, inspect the original beside every translation, and
         act on the exact phrase that needs attention. This simulation is built from interface
         elements, not screenshots. It uses fixed English / Simplified Chinese sample content;
-        the language controls illustrate settings, not live translation.
+        the language controls illustrate settings, not live translation. This example shows
+        the default Ollama route; the app also offers opt-in OpenAI.
       </p>
       <div class="reader-proof">
         <span>Choose a view</span>

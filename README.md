@@ -4,7 +4,25 @@ Marketing and interactive product-demo website for [PaperBridge](https://github.
 
 ![PaperBridge website preview](./public/images/paperbridge-social-v4.png)
 
-The interactive examples explain the native macOS workflow: PDF reconstruction with MinerU/PDFKit, local Ollama models, bilingual reading, summaries, selected-text tools, translated captions, and preserved figures and formulas. They use illustrative content, not screenshots or live AI. Language controls demonstrate app settings; the sample content stays English / Simplified Chinese.
+The interactive examples explain the native macOS workflow: local PDF reconstruction with MinerU/PDFKit, local Ollama or optional OpenAI text processing, bilingual reading, summaries, selected-text tools, translated captions, and preserved figures and formulas. They use illustrative content, not screenshots or live AI. Language controls demonstrate app settings; the sample content stays English / Simplified Chinese.
+
+## AI provider choice in 1.10.0
+
+The `#ai-providers` section presents the optional OpenAI feature alongside the existing local workflow, using the site's existing solid navy/cobalt/warm-paper/coral surfaces and typography. Availability copy targets **PaperBridge 1.10.0**; publish this website update only after that signed release and its update feed are available. The permanent DMG URL is unchanged.
+
+`AIProvidersSection.vue` is an in-memory illustration, not an API client. It accepts no keys, uploads no documents, makes no model requests, and stores nothing in browser storage. OpenAI choices A and B are fictional labels, not real model IDs or recommendations. The initial provider is Ollama; all four OpenAI task-model fields start empty.
+
+- Switch providers to compare local and online behavior; each provider keeps its illustrative task selections until page reload or Reset demo.
+- Choose separate translation, summary, paragraph explanation, and quick-lookup models, or explicitly copy the translation model to every task. The copy button stays disabled with an empty translation choice.
+- Toggle illustrative session consent to see OpenAI's paused/configuration states. Changing providers revokes the demonstration consent. Nothing is transmitted in any state.
+- Switch Selected-text help / Whole-paper tasks to see the actual app's text-sharing boundary. Selected text is accompanied by nearby context, title, and matching terminology; full translation/summary send full extracted text in batches. PDF files and images are not uploaded to OpenAI.
+- Expand Before you enable OpenAI for Keychain, model-discovery/manual-ID, session-revocation, style-guide, costs, and retention details. The native app uses the Responses API with `store: false`, which does not guarantee zero retention. API usage is paid separately from ChatGPT; there is no automatic fallback.
+
+The app stores keys in the local macOS Keychain with iCloud synchronization disabled, never in settings or exports; normal backup/migration can include Keychain. App output variants are retained locally by provider/model/language across settings changes and restarts without restoring cloud consent. Local Data clears variants. The website does not simulate durable disk storage or a real Keychain.
+
+Feature descriptions also reflect import feedback (filename, elapsed time, recognized stages; no invented overall percentage), returning to the prior paper after a canceled/failed import, and selection-translation instructions that retain uncertainty, names, symbols, and units rather than expand into explanation. These are safeguards, not a promise of perfect extraction or AI accuracy. Formula/image protection and translatable captions remain unchanged.
+
+The source of truth for this update is `../PaperBridge_UI_redesign/README.md`, `PaperReaderViewModel+AI.swift`, the selection workflow, and the variant-persistence implementation in that app repository. The website is not a release mechanism; deployment verification belongs to the publishing agent.
 
 ## Reading continuity in 1.9.1
 
@@ -36,9 +54,9 @@ Each feature includes its use case, three in-app steps, installation requirement
 
 All sample papers, translations, claims, progress states, and saved terms are illustrative. They are not live model responses, benchmarks, actual user files, or persistent browser storage. In the native app, quotation validation proves location rather than correctness; glossary entries guide future prompts, not guaranteed substitutions.
 
-`#getting-started` has three selectable routes: reading without models, translation, or optional explanation/summary. It distinguishes the ready-made DMG from a source build, keeps MinerU separate and recommended, explains TranslateGemma 4B/12B/27B, and states memory/network requirements. The hero links directly to this guide.
+`#getting-started` has four selectable routes: reading without models, local translation, local explanation/summary, or OpenAI. The online route points to Settings > Models rather than requiring an Ollama download. It keeps MinerU separate and recommended for either provider, explains TranslateGemma 4B/12B/27B for local users, and states memory/network requirements. The hero links to both this guide and the provider demonstration.
 
-Privacy copy distinguishes on-device document analysis from internet-based tool downloads, update checks, and links. Structured Markdown is not described as a pixel-identical translated PDF. Unreleased features are not silently attributed to the current DMG.
+Privacy copy distinguishes on-device parsing and local Ollama inference from explicitly enabled OpenAI text processing, downloads, update checks, and links. Structured Markdown is not described as a pixel-identical translated PDF. Availability labels must stay aligned with the signed app release.
 
 ### Keep the website and app documentation aligned
 
@@ -91,7 +109,9 @@ For the existing site, pushes to the Amplify-connected production branch can tri
 
 ## Validation
 
-Run `npm run build` for TypeScript checks and a production build, then verify the preview at desktop and mobile widths. Exercise the four original interactive examples and six new inline practices. Check all eighteen feature entries and three setup routes, keyboard focus, reduced motion, no-match search, cancellation/resume, glossary input, source expansion, typography/focus controls, console errors, and the direct-download URL. The demo must not request Ollama or upload content.
+Run `npm run build` for TypeScript checks and a production build, then verify the preview at desktop and mobile widths. Exercise the four original interactive examples, six inline practices, and provider demonstration. Check all eighteen feature entries and four setup routes, keyboard focus, reduced motion, no-match search, cancellation/resume, glossary input, source expansion, typography/focus controls, console errors, and the direct-download URL. No demo may request Ollama/OpenAI, accept an API key, or upload content.
+
+For 1.10.0, test `#ai-providers`: initial Ollama state; OpenAI's four empty models; disabled copy action until a translation model is chosen; distinct per-task choices; explicit copy-to-all; consent on/off; both request scopes; provider switching retaining sample model choices but clearing consent; and Reset demo returning to local defaults with empty OpenAI fields. Verify the new OpenAI setup route and feature chapter, expand the privacy details, and check that no API network requests occur. Check 1440px and 390px layouts plus a 320px narrow pass, keyboard labels/focus, and unchanged downloads. Browser validation of this update is assigned to the publishing agent; earlier results below apply only to the earlier site revisions.
 
 Local checks covered desktop/mobile layouts, feature/setup choices, and the four interactive examples, with no console errors or external demo requests. The former feature dropdown has been replaced with accessible disclosure buttons; verify Enter/Space, independent expansion, expand/collapse all, and no focusable links inside collapsed chapters. The design detector reports intermediate type sizes absent from the sparse `DESIGN.md` ramp; existing typography and palette were preserved rather than rewriting the design system during this feature task.
 

@@ -37,7 +37,8 @@ function toggleAll() {
             <span class="feature-title-group">
               <span class="feature-name">{{ feature.name }}</span>
               <span class="feature-question">{{ feature.question }}</span>
-              <strong v-if="feature.newIn19" class="feature-availability">New in 1.9</strong>
+              <strong v-if="feature.newIn110" class="feature-availability">New in 1.10.0</strong>
+              <strong v-else-if="feature.newIn19" class="feature-availability">New in 1.9</strong>
             </span>
             <svg class="feature-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M5 12h14" /><path class="feature-toggle-stem" d="M12 5v14" />
@@ -70,7 +71,7 @@ function toggleAll() {
         </Transition>
       </article>
     </div>
-    <p class="feature-boundary">Available in PaperBridge 1.9.1, including the reading tools introduced in 1.9. Download links serve the latest signed release. Website examples are illustrative, not live AI output.</p>
+    <p class="feature-boundary">PaperBridge 1.10.0 adds optional OpenAI alongside the reading tools introduced in 1.9 and 1.9.1. Download links serve the latest signed release. Website examples are illustrative, not live AI output.</p>
   </section>
 </template>
 
