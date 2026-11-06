@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { windowsVersion } from '../data/downloads'
 const questions = [
   {
     question: 'Do I have to use OpenAI?',
@@ -46,7 +47,7 @@ const questions = [
   },
   {
     question: 'Is Windows supported?',
-    answer: 'PaperBridge is currently a native macOS app. A Windows version is planned but is not available yet.',
+    answer: `Yes. Windows ${windowsVersion} is available as an x64 development preview. Download for Windows starts the Setup .exe download directly; a Portable .exe is also available in Downloads. The preview builds are unsigned, so Windows SmartScreen may show a warning. Windows is a separate implementation, not a guaranteed feature-identical replacement for macOS. See the Windows setup guide and release notes linked in Downloads.`,
   },
 ]
 </script>

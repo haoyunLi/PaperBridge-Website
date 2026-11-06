@@ -204,7 +204,7 @@ summary:focus-visible {
 .site-header nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
 }
 
 .site-header nav a {
@@ -236,6 +236,9 @@ summary:focus-visible {
 }
 
 .header-download {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 10px 16px;
   color: var(--paper-light);
   background: var(--blue);
@@ -340,6 +343,16 @@ summary:focus-visible {
 }
 
 .button-primary:hover {
+  background: var(--blue-dark);
+}
+
+.button-secondary {
+  color: var(--blue-dark);
+  background: var(--blue-pale);
+}
+
+.button-secondary:hover {
+  color: var(--paper-light);
   background: var(--blue-dark);
 }
 
@@ -1728,7 +1741,9 @@ summary:focus-visible {
 .platform-status h3 { margin: 14px 0 9px; font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 520; }
 .platform-status p { max-width: 45ch; margin: 0; color: #a9b7c8; font-size: 0.68rem; line-height: 1.65; }
 .platform-status a { display: inline-block; margin-top: 17px; color: #9fc0ff; font-size: 0.62rem; font-weight: 750; }
-.platform-status button { margin-top: 17px; padding: 9px 12px; color: #6f7e91; background: #26364c; border: 0; border-radius: 6px; font-size: 0.58rem; }
+.platform-status .preview-platform > span { color: var(--amber); }
+.platform-links { display: flex; flex-direction: column; align-items: flex-start; }
+.platform-links a { min-height: 44px; display: inline-flex; align-items: center; margin-top: 6px; }
 
 .site-footer {
   display: grid;

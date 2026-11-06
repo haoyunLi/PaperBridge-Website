@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { macDownloadURL, windowsDownloadURL, windowsGuideURL } from '../data/downloads'
 
 const routes = [
   { id: 'read', label: 'Read & annotate', title: 'Begin with no model downloads.', detail: 'Open an existing PDF, inspect its original pages, and mark selectable text. Add AI later when you need it.' },
@@ -30,12 +31,15 @@ const steps = computed(() => [
   <section id="getting-started" class="setup-guide" aria-labelledby="setup-title">
     <div class="setup-intro">
       <h2 id="setup-title">Your first paper.<br /><em>Not a setup project.</em></h2>
-      <p>The Mac download is a ready-to-open app. No Xcode, Homebrew, or PaperBridge account required.</p>
+      <p>The Mac download is a ready-to-open app. No Xcode, Homebrew, or PaperBridge account required. The setup examples below follow macOS; Windows has its own preview setup guide.</p>
       <div class="setup-routes" aria-label="Choose your first task">
         <button v-for="item in routes" :key="item.id" type="button" :aria-pressed="routeID === item.id" aria-controls="setup-route" @click="routeID = item.id">{{ item.label }}</button>
       </div>
-      <a class="button button-primary" href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg">Download for macOS</a>
-      <p class="setup-platform">macOS 14 or later. Windows is coming soon.</p>
+      <div class="setup-downloads">
+        <a class="button button-primary" :href="macDownloadURL">Download for macOS</a>
+        <a class="button button-secondary" :href="windowsDownloadURL">Download for Windows</a>
+      </div>
+      <p class="setup-platform">macOS 14 or later. Windows x64 preview is unsigned. <a :href="windowsGuideURL" target="_blank" rel="noreferrer">Windows setup and feature differences</a>.</p>
       <details class="setup-hardware">
         <summary>Will it fit my Mac?</summary>
         <p>Model downloads take disk space; inference also uses memory. The setup guide helps you choose a model size. MinerU recommends at least 16 GB RAM. Reading with built-in PDFKit has no MinerU requirement. Speed varies by Mac and document; a download size is not a memory guarantee.</p>
@@ -60,6 +64,7 @@ const steps = computed(() => [
 .setup-routes button { text-align: left; padding: 16px; border: 0; border-bottom: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 0.93rem; font-weight: 650; }
 .setup-routes button[aria-pressed=true] { color: var(--paper-light); background: var(--blue); }
 .setup-intro .setup-platform { font-size: 0.8rem; }
+.setup-downloads { display: flex; flex-wrap: wrap; gap: 13px; }
 .setup-hardware { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px; font-size: 0.85rem; line-height: 1.8; }
 .setup-hardware summary { cursor: pointer; font-weight: 700; }
 .setup-hardware p { color: var(--ink-soft); }

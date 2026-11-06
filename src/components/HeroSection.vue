@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { macDownloadURL, windowsDownloadURL, windowsVersion } from '../data/downloads'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 type Phase = 'import' | 'structure' | 'translate' | 'read'
@@ -69,7 +70,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
       <div class="hero-actions">
         <a
           class="button button-primary"
-          href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg"
+          :href="macDownloadURL"
           target="_blank"
           rel="noreferrer"
         >
@@ -78,6 +79,10 @@ onBeforeUnmount(() => window.clearInterval(timer))
           </svg>
           Download for macOS
         </a>
+        <a class="button button-secondary" :href="windowsDownloadURL" aria-describedby="hero-windows-status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z" /></svg>
+          Download for Windows
+        </a>
         <a class="button button-text" href="#reader">
           Explore the live reader
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 7 7-7 7" /></svg>
@@ -85,7 +90,7 @@ onBeforeUnmount(() => window.clearInterval(timer))
       </div>
       <div class="hero-availability">
         <span><i></i> 1.10.0 · Apple notarized</span>
-        <span>Windows coming soon</span>
+        <span id="hero-windows-status">Windows {{ windowsVersion }} · x64 preview · unsigned</span>
         <span>Open source</span>
       </div>
       <p class="hero-first-use">No Xcode or Homebrew needed. <a href="#getting-started">See what to install for your first paper.</a></p>

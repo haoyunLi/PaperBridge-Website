@@ -11,6 +11,7 @@ import PrivacySection from './components/PrivacySection.vue'
 import FAQSection from './components/FAQSection.vue'
 import DownloadSection from './components/DownloadSection.vue'
 import BrandMark from './components/BrandMark.vue'
+import { macDownloadURL, windowsDownloadURL } from './data/downloads'
 </script>
 
 <template>
@@ -33,7 +34,8 @@ import BrandMark from './components/BrandMark.vue'
       <nav aria-label="Footer navigation">
         <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://github.com/haoyunLi/PaperBridge#readme" target="_blank" rel="noreferrer">Documentation</a>
-        <a href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg" target="_blank" rel="noreferrer">Download</a>
+        <a :href="macDownloadURL">Download for Mac</a>
+        <a :href="windowsDownloadURL">Download for Windows</a>
         <a href="#privacy">Privacy</a>
         <a href="#ai-providers">New in 1.10.0</a>
       </nav>

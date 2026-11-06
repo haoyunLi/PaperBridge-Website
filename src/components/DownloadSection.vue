@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { macDownloadURL, windowsDownloadURL, windowsGuideURL, windowsPortableURL, windowsReleaseURL, windowsVersion } from '../data/downloads'
+</script>
+
 <template>
   <section id="download" class="download-section" aria-labelledby="download-title">
     <div class="download-copy">
@@ -6,7 +10,7 @@
       <div class="download-actions">
         <a
           class="button download-primary"
-          href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg"
+          :href="macDownloadURL"
           target="_blank"
           rel="noreferrer"
         >
@@ -15,6 +19,7 @@
           </svg>
           Download for macOS
         </a>
+        <a class="button download-primary" :href="windowsDownloadURL" aria-describedby="windows-download-note">Download for Windows</a>
         <a href="https://github.com/haoyunLi/PaperBridge" target="_blank" rel="noreferrer">View source and build guide</a>
       </div>
       <small>macOS 14 or later · Apple Silicon and Intel · Ollama required for local AI</small>
@@ -25,13 +30,18 @@
         <span><i></i> Version 1.10.0</span>
         <h3>PaperBridge for macOS</h3>
         <p>Universal Apple Silicon and Intel build, Developer ID signed and Apple notarized. Local by default, OpenAI optional.</p>
-        <a href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg" target="_blank" rel="noreferrer">Download the signed app</a>
+        <a :href="macDownloadURL">Download the signed Mac app</a>
       </article>
-      <article class="future-platform">
-        <span>In development</span>
+      <article class="available-platform preview-platform">
+        <span>Version {{ windowsVersion }} · Development preview</span>
         <h3>PaperBridge for Windows</h3>
-        <p>The local document and model toolchain is being adapted for Windows.</p>
-        <button type="button" disabled>Coming soon</button>
+        <p id="windows-download-note">Windows x64. Setup installs for your Windows user; Portable runs without installation. These preview builds are unsigned and Windows SmartScreen may show a warning.</p>
+        <div class="platform-links">
+          <a :href="windowsDownloadURL">Download Windows installer (.exe)</a>
+          <a :href="windowsPortableURL">Download portable (.exe)</a>
+          <a :href="windowsGuideURL" target="_blank" rel="noreferrer">Windows setup and feature differences</a>
+          <a :href="windowsReleaseURL" target="_blank" rel="noreferrer">Release notes and SHA-256 checksums</a>
+        </div>
       </article>
     </div>
   </section>

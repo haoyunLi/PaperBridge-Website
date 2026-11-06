@@ -39,7 +39,7 @@ Readers open or drag in a PDF, choose source and target languages, use automatic
 - Recoverable paragraph failures can be retried; global OpenAI setup, key, access/model, or rate/quota errors stop the run rather than repeat the same failure for every paragraph.
 - The website is a static Vue 3 and TypeScript site deployed through AWS Amplify.
 - The signed and Apple-notarized Universal macOS app is available from GitHub Releases; download actions link directly to the current DMG asset.
-- A Windows version is planned and may be labelled "coming soon," but it must not offer a download before it exists.
+- Windows 0.2.8 is available as an unsigned x64 development preview. Direct Setup and Portable executable downloads use the separate `windows-v0.2.8` release; GitHub's global latest remains the signed macOS release. Do not imply Windows is notarized, signed, or guaranteed feature-identical to macOS. Link the Windows setup guide for platform differences.
 
 ## Brand Commitments
 

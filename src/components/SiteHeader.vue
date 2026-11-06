@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import BrandMark from './BrandMark.vue'
+import { macDownloadURL, windowsDownloadURL } from '../data/downloads'
 
 const menuOpen = ref(false)
 
@@ -32,11 +33,12 @@ function closeMenu() {
       </a>
       <a
         class="header-download"
-        href="https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg"
+        :href="macDownloadURL"
         target="_blank"
         rel="noreferrer"
         @click="closeMenu"
       >Download for Mac</a>
+      <a class="header-download" :href="windowsDownloadURL" aria-label="Download for Windows (x64 preview)" @click="closeMenu">Windows (preview)</a>
     </nav>
   </header>
 </template>

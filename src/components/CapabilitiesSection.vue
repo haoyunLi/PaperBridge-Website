@@ -71,7 +71,7 @@ function toggleAll() {
         </Transition>
       </article>
     </div>
-    <p class="feature-boundary">PaperBridge 1.10.0 adds optional OpenAI alongside the reading tools introduced in 1.9 and 1.9.1. Download links serve the latest signed release. Website examples are illustrative, not live AI output.</p>
+    <p class="feature-boundary">PaperBridge for macOS 1.10.0 adds optional OpenAI alongside the reading tools introduced in 1.9 and 1.9.1. Mac downloads serve the latest signed release; Windows is a separate unsigned x64 development preview. Website examples illustrate the macOS app, not live AI output or guaranteed Windows feature parity.</p>
   </section>
 </template>
 

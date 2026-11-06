@@ -4,6 +4,16 @@ Marketing and interactive product-demo website for [PaperBridge](https://github.
 
 ![PaperBridge website preview](./public/images/paperbridge-social-v4.png)
 
+## Downloads
+
+- [Download for macOS (.dmg)](https://github.com/haoyunLi/PaperBridge/releases/latest/download/PaperBridge.dmg)
+- [Download for Windows (.exe)](https://github.com/haoyunLi/PaperBridge/releases/download/windows-v0.2.8/PaperBridge-Windows-0.2.8-x64-Setup.exe)
+- [Windows portable (.exe)](https://github.com/haoyunLi/PaperBridge/releases/download/windows-v0.2.8/PaperBridge-Windows-0.2.8-x64-Portable.exe)
+
+Windows 0.2.8 is an unsigned x64 development preview; SmartScreen may display a warning. See the [Windows setup guide and feature differences](https://github.com/haoyunLi/PaperBridge/blob/windows-v0.2.8/windows/README.md) and [release notes/checksums](https://github.com/haoyunLi/PaperBridge/releases/tag/windows-v0.2.8). Website simulations and setup examples depict macOS, not guaranteed Windows feature parity.
+
+Website download destinations live in `src/data/downloads.ts`. Windows buttons link straight to the Setup asset, not the release page. When publishing a Windows update, update `windowsVersion` and the versioned URLs in both repositories' READMEs after checking the new assets. Do not use `releases/latest/download` for Windows: that endpoint belongs to the macOS release and its update feed.
+
 The interactive examples explain the native macOS workflow: local PDF reconstruction with MinerU/PDFKit, local Ollama or optional OpenAI text processing, bilingual reading, summaries, selected-text tools, translated captions, and preserved figures and formulas. They use illustrative content, not screenshots or live AI. Language controls demonstrate app settings; the sample content stays English / Simplified Chinese.
 
 ## AI provider choice in 1.10.0
